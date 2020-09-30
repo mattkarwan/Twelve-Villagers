@@ -96,6 +96,10 @@ function newGame() {
 // Check weight
 function checkWeight() {
 
+  if (remaining === 0) {
+    return;
+  }
+
   // Count on each side
   let leftNo = 0;
   let rightNo = 0;
@@ -156,8 +160,8 @@ function useSeesaw(leftWeight, rightWeight) {
   for (var i = 0; i < meeples.length; i++) {
     if (!meeples[i].classList.contains("dropped-left") && !meeples[i].classList.contains("dropped-right")) {
       meeples[i].classList.add("meeple-hidden");
-    }
-  }
+    };
+  };
 
   seesaw.className = "wobble-group";
   let outcome;
@@ -220,6 +224,18 @@ function saveHistory(outcome) {
   }
 
   remaining--;
+
+  setTimeout(function() {
+    for (let i = 0; i < meeples.length; i++) {
+      meeples[i].classList.remove("meeple-hidden");
+    };
+    seesaw.classList.remove("wobble");
+    seesaw.classList.remove("heavier");
+    seesaw.classList.remove("lighter");
+  }, 2000);
+
+  // Update text for remaining
+  remainingCount.innerHTML = remaining;
  
 }
 

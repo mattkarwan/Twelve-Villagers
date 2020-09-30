@@ -9,7 +9,6 @@ body {
   height: 100vh;
 }
 
-
 .meeple {
   width: 50px;
   position: absolute;
@@ -169,6 +168,7 @@ body {
 }
 
 .wobble-group {
+  position: relative;
   display: flex;
   width: 100vw;
 }
