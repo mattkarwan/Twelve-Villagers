@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+      <title>Twelve Islanders</title>
+      <link rel="icon" href="images/meeple.svg">
+      <link rel="stylesheet" href="style.css">
+      <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+      <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  </head>
+
+  <body>
+
+
+    <div class="meepleArea"></div>
+
+
+    <button id="newGame">New game</button>
+    <button id="resetMeeples">Reset meeples</button>
+
+    <div id="capture">
+      <div id="seesaw" class="wobble-group">
+
+          <div id="meeple_1" class="meeple drag-drop">1</div>
+          <div id="meeple_2" class="meeple drag-drop">2</div>
+          <div id="meeple_3" class="meeple drag-drop">3</div>
+          <div id="meeple_4" class="meeple drag-drop">4</div>
+          <div id="meeple_5" class="meeple drag-drop">5</div>
+          <div id="meeple_6" class="meeple drag-drop">6</div>
+          <div id="meeple_7" class="meeple drag-drop">7</div>
+          <div id="meeple_8" class="meeple drag-drop">8</div>
+          <div id="meeple_9" class="meeple drag-drop">9</div>
+          <div id="meeple_10" class="meeple drag-drop">10</div>
+          <div id="meeple_11" class="meeple drag-drop">11</div>
+          <div id="meeple_12" class="meeple drag-drop">12</div>
+
+        <div id="inner-dropzone" class="dropzone dropzone-left"></div>
+        <div id="inner-dropzone" class="dropzone dropzone-right"></div>
+
+      </div>
+    </div>
+    
+    <button id="weighBtn">Weigh</button>
+    <p><span id="remainingCount">3</span> uses remaining</p>
+
+    <div id="canvasContainer">
+      <div id="firstCanvas"></div>
+      <div id="secondCanvas"></div>
+    </div>
+
+  </body>
+  
+  <script src="script.js"></script>
+</html>
