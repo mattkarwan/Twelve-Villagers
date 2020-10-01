@@ -6,6 +6,7 @@ let remainingCount = document.getElementById("remainingCount");
 let canvasContainer = document.getElementById("canvasContainer");
 let firstCanvas = document.getElementById("firstCanvas");
 let secondCanvas = document.getElementById("secondCanvas");
+let radioGuess = document.querySelectorAll(".radio-weight");
 
 // JS Variables
 const meepleLocations = [];
@@ -167,20 +168,26 @@ function useSeesaw(leftWeight, rightWeight) {
   let outcome;
 
   setTimeout(function() {
+
+    let lastWeigh = "";
+
+    if (remaining === 1) {
+      lastWeigh = "last-";
+    }
     // Balance
     if (leftWeight === rightWeight) {
-      seesaw.classList.add("wobble");
+      seesaw.classList.add(`${lastWeigh}wobble`);
       outcome = "even";
     }
 
     // Left heavier
     else if (leftWeight > rightWeight) {
-      seesaw.classList.add("heavier");
+      seesaw.classList.add(`${lastWeigh}heavier`);
       outcome = "heavier";
     }
     // Right heavier
     else {
-      seesaw.classList.add("lighter");
+      seesaw.classList.add(`${lastWeigh}lighter`);
       outcome = "lighter";
     }
 
@@ -224,6 +231,9 @@ function saveHistory(outcome) {
   }
 
   remaining--;
+  if (remaining === 0) {
+    weighBtn.classList.add("hidden");
+  }
 
   setTimeout(function() {
     for (let i = 0; i < meeples.length; i++) {
@@ -258,6 +268,7 @@ function dragMoveListener (event) {
 
   target.classList.remove("dropped-left");
   target.classList.remove("dropped-right");
+  target.classList.remove("dropped-guess");
   // keep the dragged position in the data-x/data-y attributes
   var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
   var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
@@ -319,6 +330,10 @@ interact('.dropzone').dropzone({
     else if (event.target.classList.contains("dropzone-right")) {
       event.relatedTarget.classList.add("dropped-right");
     }
+
+    else if (event.target.classList.contains("dropzone-guess")) {
+      event.relatedTarget.classList.add("dropped-guess");
+    }
   },
   ondropdeactivate: function (event) {
     // Any time it's dropped
@@ -331,4 +346,27 @@ interact('.drag-drop')
   .draggable({
     inertia: false,
     listeners: { move: dragMoveListener }
+  })
+
+
+
+  // Open guess form
+  document.getElementById("guess").addEventListener("click", function() {
+    document.getElementById("guessContainer").style.display = "flex";
+  })
+
+  document.getElementById("submitGuess").addEventListener("click", function() {
+    if (document.getElementById("meepleGuess").value == target) {
+      for (let i = 0; i < radioGuess.length; i++) {
+        if (radioGuess[i].checked) {
+          if (radioGuess[i].value == weight) {
+            console.log('correct');
+            return;
+          }
+        }
+      }
+    } else {
+      console.log("incorrect");
+      return;
+    }
   })

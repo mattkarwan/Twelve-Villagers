@@ -43,6 +43,23 @@
     <button id="weighBtn">Weigh</button>
     <p><span id="remainingCount">3</span> uses remaining</p>
 
+    <button id="guess">Make a guess</button>
+
+    <div id="guessContainer" style="display: none" class="guess-container">
+      <form>
+
+        <div id="inner-dropzone" class="dropzone dropzone-guess"></div>
+
+        <input type="radio" id="heavier" name="weight" class="radio-weight" value="2">
+        <label for="heavier">Heavier</label>
+
+        <input type="radio" id="lighter" name="weight" class="radio-weight" value="1">
+        <label for="lighter">Lighter</label>
+
+        <button type="button" id="submitGuess">Submit</button>
+      </form>
+    </div>
+
     <div id="canvasContainer">
       <div id="firstCanvas"></div>
       <div id="secondCanvas"></div>
