@@ -1,0 +1,15 @@
+<svg id="Cloud" xmlns="http://www.w3.org/2000/svg" width="299" height="175.468" viewBox="0 0 299 175.468">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <ellipse id="Ellipse_7" data-name="Ellipse 7" class="cls-1" cx="52.5" cy="40.5" rx="52.5" ry="40.5" transform="translate(105 0)"/>
+  <ellipse id="Ellipse_8" data-name="Ellipse 8" class="cls-1" cx="52" cy="40" rx="52" ry="40" transform="translate(53 42)"/>
+  <ellipse id="Ellipse_9" data-name="Ellipse 9" class="cls-1" cx="53" cy="40.5" rx="53" ry="40.5" transform="translate(157 44)"/>
+  <ellipse id="Ellipse_10" data-name="Ellipse 10" class="cls-1" cx="52.5" cy="40" rx="52.5" ry="40" transform="translate(194 95)"/>
+  <ellipse id="Ellipse_11" data-name="Ellipse 11" class="cls-1" cx="52.5" cy="40" rx="52.5" ry="40" transform="translate(0 95)"/>
+  <path id="Path_5" data-name="Path 5" class="cls-1" d="M37.18-57.369H146.993l58.149,98.556H0Z" transform="translate(47.169 134.28)"/>
+</svg>

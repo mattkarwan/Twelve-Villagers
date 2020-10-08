@@ -1,0 +1,11 @@
+<svg id="Component_7_1" data-name="Component 7 – 1" xmlns="http://www.w3.org/2000/svg" width="75" height="200" viewBox="0 0 75 200">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <rect id="Rectangle_33" data-name="Rectangle 33" class="cls-1" width="25" height="125" transform="translate(25)"/>
+  <path id="Polygon_1" data-name="Polygon 1" class="cls-1" d="M37.5,0,75,75H0Z" transform="translate(75 200) rotate(180)"/>
+</svg>

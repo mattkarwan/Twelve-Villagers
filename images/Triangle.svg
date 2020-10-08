@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="176" viewBox="0 0 224 176">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #a56a1f;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: none;
+      }
+
+      .cls-3 {
+        fill: #66461d;
+      }
+    </style>
+  </defs>
+  <g id="Triangle" class="cls-1">
+    <path class="cls-2" d="M 219.4458312988281 173.5 L 4.554168224334717 173.5 L 112 4.656550407409668 L 219.4458312988281 173.5 Z"/>
+    <path class="cls-3" d="M 112 9.313125610351563 L 9.108352661132813 171 L 214.8916473388672 171 L 112 9.313125610351563 M 112 0 L 224 176 L 0 176 L 112 0 Z"/>
+  </g>
+</svg>

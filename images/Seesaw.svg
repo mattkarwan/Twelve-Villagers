@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="339" viewBox="0 0 1080 339">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #a56a1f;
+      }
+
+      .cls-2 {
+        stroke: #66461d;
+        stroke-width: 5px;
+      }
+
+      .cls-3, .cls-6 {
+        fill: #66461d;
+      }
+
+      .cls-4 {
+        fill: #fff;
+        opacity: 0.15;
+      }
+
+      .cls-5, .cls-6, .cls-8 {
+        stroke: none;
+      }
+
+      .cls-7 {
+        fill: none;
+      }
+
+      .cls-8 {
+        fill: #707070;
+      }
+    </style>
+  </defs>
+  <g id="Seesaw" transform="translate(-467 -1628)">
+    <g id="Triangle" class="cls-1" transform="translate(926 1781)">
+      <path class="cls-5" d="M 157.1939086914063 183.5 L 3.806094646453857 183.5 L 80.5 6.294206142425537 L 157.1939086914063 183.5 Z"/>
+      <path class="cls-6" d="M 80.5 12.58836364746094 L 7.612167358398438 181 L 153.3878326416016 181 L 80.5 12.58836364746094 M 80.5 0 L 161 186 L 0 186 L 80.5 0 Z"/>
+    </g>
+    <g id="Log" class="cls-2" transform="translate(467 1781)">
+      <rect class="cls-5" width="1080" height="37" rx="10"/>
+      <rect class="cls-7" x="2.5" y="2.5" width="1075" height="32" rx="7.5"/>
+    </g>
+    <circle id="Bolt" class="cls-3" cx="8.5" cy="8.5" r="8.5" transform="translate(999 1791)"/>
+    <g id="Weigh_area" data-name="Weigh area" class="cls-4" transform="translate(1127 1628)">
+      <path class="cls-5" d="M420,0V0Z"/>
+      <path class="cls-8" d="M 420 0 L 420 153 L 420 0 Z"/>
+    </g>
+  </g>
+</svg>

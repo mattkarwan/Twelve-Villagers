@@ -1,0 +1,786 @@
+// Fonts
+$sign: 'Julius Sans One', sans-serif;
+$subheadings: 'Raleway', sans-serif;
+
+// General styling
+@mixin absolute-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// Colours
+  // Meeples
+  $black: #0B0A07;
+  $red: #6B0504;
+  $green: #12664F;
+  
+  $orange: #A3320B;
+  $cerise: #832161;
+  $cyan: #179191;
+  $purple: #320D6D;
+  $blue: #011936;
+  $yellow: #D78521;
+  $grey: #505050;
+  $pink: #D81E5B;
+  $brown: #652800;
+
+  // Background
+  $white: #fff;
+  $skyDark: #0081f8;
+  $skyLight: #0096ff;
+  $greenBtn: #32936F;
+  $sand: linear-gradient(#F8F0A4, darken(#F8F0A4, 10%));
+  $faded: rgba(0, 0, 0, 0.4);
+  $moreFaded: rgba(0, 0, 0, 0.1);
+
+// Colours of meeples
+
+$colors: $black, $red, $green, $orange, $cerise, $cyan, $purple, $blue, $yellow, $grey, $pink, $brown;
+
+@for $i from 1 through length($colors) {
+  .meeple:nth-child(#{length($colors)}n+#{$i}) {
+    stroke: $white;
+    stroke-width: 0.5px;
+    fill: nth($colors, $i);
+    text-align: center;
+    
+    tspan {
+      fill: $white;
+      stroke: none;
+      font-size: 20px; 
+      font-family: $sign;
+    }
+  }
+}
+
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  -webkit-user-select: none;
+  font-family: sans-serif;
+  line-height: 1.4;
+}
+
+body {
+  height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient($skyDark, $skyLight);
+}
+
+button {
+  cursor: pointer;
+}
+
+
+.game-area {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: -10;
+}
+
+/* Start Game page */
+.home-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+    .sign-holder {
+      display: none;
+      display: flex;
+      justify-content: center;
+      width: 70%;
+      max-width: 500px;
+      z-index: -1;
+      transition: 1250ms all ease-in-out;
+      margin: -10px auto 50px auto;
+    }
+
+    svg {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      animation-name: sign;
+      animation-duration: 6s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    @keyframes sign {
+      0% {
+        transform: rotate(2deg) translate(-10px);
+      }
+      50% {transform: rotate(-2deg) translate(10px);}
+
+      100% {transform: rotate(2deg) translate(-10px);}
+    }
+
+    .description-holder {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      background: $skyDark;
+      border-radius: 5px;
+      margin: 20px auto 20px auto;
+
+      h2 {
+        font-size: 20px;
+        font-family: $sign;
+        color: $white;
+        border-bottom: 1px solid $white;
+      }
+
+      p {
+        font-family: $subheadings;
+        font-size: 18px;
+        text-align: center;
+        color: $white;
+        padding: 10px;
+
+        span {
+          font-size: 18px;
+          font-family: $subheadings;
+          padding-bottom: 10px;
+        }
+      }
+    }
+
+    button {
+      font-family: $sign;
+      font-size: 20px;
+      color: $white;
+      background: $greenBtn;
+      border: none;
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+ }
+
+
+// Hanging Sign
+.sign-holder {
+  .cls-1 {
+    fill: #a56a1f;
+    stroke-width: 5px;
+  }
+  
+  .cls-1, .cls-2 {
+    stroke: #66461d;
+  }
+  
+  .cls-2, .cls-5 {
+    fill: none;
+  }
+  
+  .cls-2 {
+    stroke-width: 10px;
+  }
+  
+  
+  .cls-4 {
+    stroke: none;
+  }
+  
+  tspan {
+    font-size: 60px;
+    font-family: $sign;
+    fill: $white;
+  }
+}
+
+
+
+
+// Clouds
+.cloud-container {
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  left: -200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  transition: 1500ms all ease-in-out;
+
+  .cloud {
+    width: 200px;
+    animation-name: cloud;
+    animation-duration: 22s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    z-index: -2;
+  }
+
+  img:nth-child(2) {
+    animation-delay: 12s;
+  }
+
+  img:nth-child(3) {
+    animation-delay: 5s;
+  }
+
+  img:nth-child(4) {
+    animation-delay: 15s;
+  }
+
+}
+
+@for $i from 1 through 4 {
+  .cloud-container img:nth-child(#{$i}) {
+    animation-duration: 22s - random(2) * $i;
+  }
+}
+
+
+@keyframes cloud {
+  0% {transform: translateX(0);}
+  100% {transform: translateX(calc(100vw + 200px));}
+}
+
+
+
+// Game area
+
+nav {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+  ul {
+    display: flex;
+    list-style: none;
+    float: right;
+    li {
+      button {
+        margin: 0 20px;
+        border: none;
+        background: none;
+        color: $white;
+        font-family: $sign;
+      }
+    }
+  }
+}
+
+.sky-instructions {
+  @include absolute-center;
+  top: 200px;
+  text-align: center;
+  width: 800px;
+  margin: 0 auto;
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+
+  p {
+    font-size: 20px;
+    color: $white;
+    font-family: $subheadings;
+  }
+}
+
+
+
+
+
+
+
+.meeple {
+  width: 60px;
+  position: absolute;
+  height: 50px;
+  opacity: 1;
+  transition: 150ms opacity ease-in-out;
+
+  .a {
+    stroke: #fff;
+    stroke-width: 0.5px;
+  }
+  
+  .b {
+    fill: #fff;
+    font-size: 24px;
+    font-family: TempusSansITC, Tempus Sans ITC;
+  }
+}
+
+.meeple-hidden {
+  opacity: 0;
+  transition: all 200ms ease-in-out !important;
+}
+
+
+
+.placeholder-left,
+.placeholder-right {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.red {
+  background: red;
+}
+
+#canvasContainer {
+  width: 100%;
+  position: absolute;
+  padding: 10px;
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  top: 50px;
+  text-align: center;
+  z-index: -2;
+  //opacity: 0;
+  background: $moreFaded;
+  transition: opacity 250ms ease-in-out;
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  h2 {
+    grid-column: span 2;
+    font-family: $sign;
+    font-size: 20px;
+    color: $black;
+  }
+
+  h3 {
+    font-family: $sign;
+    font-size: 20px;
+    color: $black;
+  }
+}
+
+.canvas-even {
+}
+
+.canvas-lighter {
+  transform: rotate(20deg);
+}
+
+.canvas-heavier {
+  transform: rotate(-20deg);
+}
+
+.lighter {
+  animation-name: lighter;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+}
+
+.wobble {
+  animation-name: wobble;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+}
+
+.heavier {
+  animation-name: heavier;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.last-heavier {
+  animation-name: last-heavier;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.last-lighter {
+  animation-name: last-lighter;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+
+
+
+
+#ss-left, #ss-right {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  width: 225px;
+  height: 75px;
+  top: -75px;
+  display: flex;
+}
+
+#ss-right {
+  right: 0;
+}
+
+#balancer {
+  @include absolute-center;
+  width: 50px;
+  height: 50px;
+  background: burlywood;
+  top: 20px;
+}
+
+.weigh-btn_holder {
+  @include absolute-center;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  button {
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background: $greenBtn;
+    color: $white;
+    font-family: $sign;
+    padding: 10px 20px;
+  }
+
+  p {
+    font-size: 20px;
+    font-family: $subheadings;
+  }
+}
+
+.guess-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-family: $sign;
+  background: $greenBtn;
+  border: none;
+  border-radius: 10px;
+  color: $white;
+  padding: 10px 20px;
+}
+
+
+
+@keyframes wobble {
+  0% {transform: rotate(0deg);}
+  25% {transform: rotate(2deg) translatex(-8px);}
+  50% {transform: rotate(0deg);}
+  75% {transform: rotate(-2deg) translatex(8px);}
+  100% {transform: rotate(0deg);}
+}
+
+@keyframes heavier {
+  0% {transform: rotate(0deg);}
+  12.5% {transform: rotate(2deg) translatex(-8px);}
+  25% {transform: rotate(0deg);}
+  37.5% {transform: rotate(-2deg) translatex(8px);}
+  60% {transform: rotate(-20deg) translate(80px, 12px);}
+  90% {transform: rotate(-20deg) translate(80px, 12px);}
+  100% {transform: rotate(0deg);}
+}
+
+@keyframes lighter {
+  0% {transform: rotate(0deg);}
+  12.5% {transform: rotate(-2deg) translatex(8px);}
+  25% {transform: rotate(0deg);}
+  37.5% {transform: rotate(2deg) translatex(-8px);}
+  60% {transform: rotate(20deg) translate(-75px, 10px);}
+  90% {transform: rotate(20deg) translate(-75px, 10px);}
+  100% {transform: rotate(0deg);}
+}
+
+/* Animations for last weighing */
+
+@keyframes last-heavier {
+  0% {transform: rotate(0deg);}
+  25% {transform: rotate(2deg) translatex(-8px);}
+  50% {transform: rotate(0deg);}
+  75% {transform: rotate(-2deg) translatex(8px);}
+  100% {transform: rotate(-20deg) translate(80px, 12px);}
+}
+
+@keyframes last-lighter {
+  0% {transform: rotate(0deg);}
+  25% {transform: rotate(-2deg) translatex(8px);}
+  50% {transform: rotate(0deg);}
+  75% {transform: rotate(2deg) translatex(-8px);}
+  100% {transform: rotate(20deg) translate(-75px, 10px);}
+}
+
+.guess-container {
+  display: flex;
+}
+
+#drag-1, #drag-2 {
+  width: 25%;
+  min-height: 6.5em;
+  margin: 1rem 0 0 1rem;
+  background-color: #29e;
+  color: white;
+  border-radius: 0.75em;
+  padding: 4%;
+  touch-action: none;
+  user-select: none;
+  -webkit-transform: translate(0px, 0px);
+          transform: translate(0px, 0px);
+}
+
+
+
+#outer-dropzone {
+  height: 140px;
+}
+
+#inner-dropzone {
+  height: 80px;
+}
+
+#capture {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 500px;
+  width: 100%;
+}
+
+.wobble-group {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.dropzone-holder {
+  position: absolute;
+  bottom: 215px;
+  width: 100%;
+  height: 140px;
+  display: flex;
+  z-index: -1;
+}
+
+
+.dropzone {
+  background-color: $faded;
+  border: dashed 4px transparent;
+  border-radius: 4px;
+  margin: 20px auto;
+  padding: 0;
+  width: 350px;
+  height: 120px !important;
+  transition: background-color 0.3s;
+}
+
+.drop-active {
+  border-color: red;
+}
+
+.drop-target {
+  background-color: #29e;
+  border-color: #fff;
+  border-style: solid;
+}
+
+.dropped-guess {
+  background-color: $greenBtn !important;
+}
+
+
+.drag-drop {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+
+  touch-action: none;
+  -webkit-transform: translate(0px, 0px);
+          transform: translate(0px, 0px);
+
+  transition: background-color 0.3s;
+}
+
+.hidden {
+  display: none;
+}
+
+.all-meeples {
+  z-index: 10;
+}
+
+
+//////////////////////////////// Decorative Elements ////////////////////////////
+
+// Meeple holding zone
+.meeple-area {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+
+  .meeple-background {
+    width: 360px;
+    height: 130px;
+    background: $black;
+    border: 1px solid $black;
+    border-radius: 5px;
+    z-index: -1;
+  }
+
+  .meeple-reset {
+    font-size: 18px;
+    padding: 5px 10px;
+    font-family: $sign;
+    border: none;
+    border-radius: 10px;
+    width: fit-content;
+    background: $greenBtn;
+    color: $white;
+    margin: 10px auto 0px auto;
+  }
+}
+
+
+
+
+
+// Meeples in starting area
+// 4 x 3 if preferred
+
+// @for $i from 1 through 12 {
+
+//   // Meeples 9-12
+//   @if $i > 8 {
+//     .meeple:nth-child(#{$i}) {
+//       bottom: 60px;
+//       left: 10px + (($i - 9) * 60);
+//     }
+//   }
+
+//   // Meeples 5-8
+//   @else if $i > 4 {
+//     .meeple:nth-child(#{$i}) {
+//       bottom: 120px;
+//       left: 10px + (($i - 5) * 60);
+//     }
+//   } 
+
+//   // Meeples 1-4
+//   @else {
+//     .meeple:nth-child(#{$i}) {
+//       bottom: 180px;
+//       left: 10px + (($i - 1) * 60);
+//     }
+//   }
+
+// }
+
+// Meeple starting positions
+
+// 6 x 2
+
+@for $i from 1 through 12 {
+
+  // Meeples 9-12
+  @if $i > 6 {
+    .meeple:nth-child(#{$i}) {
+      bottom: 65px;
+      left: 10px + (($i - 7) * 60);
+    }
+  }
+
+  // Meeples 1-4
+  @else {
+    .meeple:nth-child(#{$i}) {
+      bottom: 125px;
+      left: 10px + (($i - 1) * 60);
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+.seesaw {
+  position: absolute;
+  bottom: 90px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  svg {
+    width: 90%;
+    max-width: 900px;
+  }
+
+  .cls-1 {
+    fill: #a56a1f;
+    stroke: #66461d;
+    stroke-width: 5px;
+  }
+
+
+  .cls-2 {
+    stroke: none;
+  }
+
+}
+
+
+.sand {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 190px;
+  background: $sand;
+  z-index: -10;
+}
+
+
+
+
+
+// Seesaw base triangle
+#seesawBase {
+  @include absolute-center;
+  bottom: 125px;
+  height: 120px;
+  z-index: -1;
+
+
+
+  .cls-1 {
+    fill: #a56a1f;
+  }
+  
+  .cls-2, .cls-3 {
+    stroke: none;
+  }
+  
+  .cls-3 {
+    fill: #66461d;
+  }
+}
+
+
