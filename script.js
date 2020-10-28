@@ -1,11 +1,14 @@
 // DOM variables
+let homePage = document.getElementById("homePage");
+let gameArea = document.getElementById("gameArea");
 let meeples = document.querySelectorAll(".meeple");
 let seesaw = document.getElementById("seesaw");
 let weighBtn = document.getElementById("weighBtn");
+let weighBtnHolder = document.getElementById("weighBtnHolder");
 let remainingCount = document.getElementById("remainingCount");
-let canvasContainer = document.getElementById("canvasContainer");
-let firstCanvas = document.getElementById("firstCanvas");
-let secondCanvas = document.getElementById("secondCanvas");
+let historyContainer = document.getElementById("historyContainer");
+let firstHistory = document.getElementById("firstHistory");
+let secondHistory = document.getElementById("secondHistory");
 let radioGuess = document.querySelectorAll(".radio-weight");
 let newGameBtn = document.getElementById("newGame");
 let meepleHolder = document.getElementById("meepleHolder");
@@ -17,6 +20,31 @@ let clouds = document.getElementById("clouds");
 let introText = document.getElementById("introText");
 let skyInstructions = document.getElementById("skyInstructions")
 let nav = document.getElementById("nav");
+let openNotepad = document.getElementById("openNotepad");
+let notepad = document.getElementById("notepad");
+let notepadCover = document.getElementById("notepadCover");
+let notepadBack = document.getElementById("notepadBack");
+let notepadClose = document.getElementById("notepadClose");
+let notepadInput = document.getElementById("notepadInput");
+let notepadPages = document.querySelectorAll(".flip-page");
+let viewSolution = document.getElementById("viewSolution");
+let solution = document.getElementById("solution");
+let solutionInfo = document.getElementById("solutionInfo");
+let solutionClose = document.getElementById("solutionClose");
+let guessBtn = document.getElementById("guess");
+let guessContainer = document.getElementById("guessContainer");
+let guessSub = document.getElementById("submitGuess");
+let FH_template = document.getElementById("FH_template");
+let RH_template = document.getElementById("SH_template");
+let preventClick = document.getElementById("preventClick");
+
+
+// Meeples from history template
+let FH_leftMeeples = document.querySelectorAll(".FH_left-meeple");
+let FH_rightMeeples = document.querySelectorAll(".FH_right-meeple");
+
+let SH_leftMeeples = document.querySelectorAll(".SH_left-meeple");
+let SH_rightMeeples = document.querySelectorAll(".SH_right-meeple");
 
 // JS Variables
 const meepleLocations = [];
@@ -25,6 +53,15 @@ let target = Math.floor(Math.random() * meeples.length);
 let weight = Math.floor(Math.random() * 2) + 1;
 let guessedMeeple;
 let z = 0;
+let notepadOpen = false;
+
+// Reset body position on page refresh - MIGHT NOT NEED THIS
+// window.onbeforeunload = function () {
+//   homeArea.style.transition = "0ms";
+//   gameArea.style.transition = "0ms";
+//   homeArea.style.transform = "translatey(0)";
+//   gameArea.style.transform = "translatey(100vh)";
+// }
 
 // Start game
 startBtn.addEventListener("click", startGame);
@@ -38,60 +75,87 @@ resetMeepleBtn.addEventListener("click", meepleStart);
 // Weight on left and right
 weighBtn.addEventListener("click", checkWeight);
 
-// Notepad
-let openNotepad = document.getElementById("openNotepad");
-let notepad = document.getElementById("notepad");
-let notepadClose = document.getElementById("notepadClose");
-let notepadInput = document.getElementById("notepadInput").value;
-
 // Toggle notepad
 openNotepad.addEventListener("click", toggleNotepad);
 notepadClose.addEventListener("click", toggleNotepad);
 
-function toggleNotepad() {
-  notepad.classList.toggle("hidden");
-}
-
 // View solution
-let viewSolution = document.getElementById("viewSolution");
-let solution = document.getElementById("solution");
+viewSolution.addEventListener("click", () => toggleVisible(solution));
 
-viewSolution.addEventListener("click", function() {
-  solution.classList.toggle("hidden");
-})
+// Close solution
+solution.addEventListener("click", (e) => {
+  if (e.target.contains(solutionInfo) || e.target.contains(solutionClose)) {
+    toggleVisible(solution)
+  }
+});
 
+// Show make guess button
+guessBtn.addEventListener("click", () => toggleVisible(guessContainer));
+
+// Submit guess
+//guessSub.addEventListener("click", makeGuess);
+
+document.body.addEventListener("click", (e) => {
+  if (e.target == notepadInput) {
+    e.preventDefault;
+  }
+});
 
 
 ////////////////////////////////////// Functions ////////////////////////////////////////////
 
-// Start game --> move sign out of way
-function startGame () {
+// Move to game area
+function appHeight () {
+  document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`)
+  window.addEventListener('resize', appHeight)
+} 
+appHeight()
 
-  sign.style.transform = "translatey(-700px)";
-
-  introText.classList.add("hidden");
+// Move back to home page on window reload
 
 
-  // setTimeout(function() {
 
-  //   document.body.style.transition = "3500ms transform ease-in-out";
-  //   document.body.style.transform = "translatey(-100vh)";
-  //   setTimeout(function() {
-  //     document.body.style.transition = "0";
-  //     skyInstructions.style.opacity = "1";
-  //     setTimeout(function() {
-  //       nav.style.opacity = "1";
-  //     }, 1500);
-  //   }, 3500);
+function makeInvisible () {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.remove("visible");
+    arguments[i].classList.add("invisible");
+  }
+}
 
-  // }, 1500);
+function makeVisible () {
+  for (let i = 0; i < arguments.length; i++) {
 
+    if (arguments[i].classList.contains("invisible")) {3
+
+      arguments[i].classList.remove("invisible");
+      arguments[i].classList.add("visible");
+
+      setTimeout(() => {
+        arguments[i].classList.remove("visible");
+      }, 251);
+    }
+  }
 }
 
 
+function startGame () {
+  // Move sign + hide intro/button
+  sign.style.transform = "translatey(-700px)";
+  makeInvisible(introText, startBtn);
 
 
-// Meeples | start position
+  setTimeout(() => {
+    document.getElementById("homePage").classList.add("move-pages");
+    document.getElementById("gameArea").classList.add("move-pages");
+    setTimeout(() => {
+      makeVisible(nav);
+      makeVisible(skyInstructions);
+    }, 4000);
+
+  }, 1500);
+
+}
+
 function meepleStart () {
 
   let t = 0;
@@ -108,13 +172,15 @@ function meepleStart () {
   // Reset moved meeples to start position
   for (let i = 0; i < movedMeeples.length; i++) {
 
-    // Timer to fan them back in order
-    setTimeout(function() {
+    // Timer to stagger recall of meeples
+    setTimeout(() => {
       movedMeeples[i].style.transition = "500ms all ease-in-out";
       movedMeeples[i].style.transform = "translate(0, 0)";
       movedMeeples[i].setAttribute('data-x', 0);
       movedMeeples[i].setAttribute('data-y', 0);
-      setTimeout(function() {
+
+      // Reset transition to 0ms so dragging works
+      setTimeout(() => {
         movedMeeples[i].style.transition = "0ms";
       }, 500);
     }, t);
@@ -140,47 +206,64 @@ function newGame() {
 
   // Reset moves count
   remaining = 3;
-  remainingCount.innerHTML = remaining;
+  remainingCount.innerHTML = `${remaining} uses remaining`;
 
-  // Clear canvas
-  while (firstCanvas.firstChild) {
-    firstCanvas.removeChild(firstCanvas.lastChild);
-  };
-  while (secondCanvas.firstChild) {
-    secondCanvas.removeChild(secondCanvas.lastChild);
-  };
+  // Clear history
+  clearHistory();
+
 
   // Remove seesaw and meeple classes
-  seesaw.className = "wobble-group";
+  seesaw.className = "seesaw-and-meeples";
 
   // Reset guess form
   guessContainer.classList.add("hidden");
   guessForm.reset();
 
-  skyInstructions.style.display = "block";
-  setTimeout(function() {
-    skyInstructions.style.opacity = "1";
-  }, 1);
+  makeVisible(skyInstructions);
 
 }
 
+// Clear history
+function clearHistory() {
 
+  firstHistory.classList.add("invisible");
+  secondHistory.classList.add("invisible");
 
+  setTimeout(() => {
+    clearMeeples(FH_leftMeeples, FH_rightMeeples, SH_leftMeeples, SH_rightMeeples);
+    FH_template.style.transform = "rotate(0deg)";
+    SH_template.style.transform = "rotate(0deg)";
+  }, 250);
+}
+
+// Clear history seesaws
+function clearMeeples() {
+
+  for (let i = 0; i < arguments.length; i++) {
+
+    for (let j = 0; j < arguments[i].length; j++) {
+      arguments[i][j].style.fill = "none";
+      arguments[i][j].style.stroke = "none";
+      arguments[i][j].childNodes[3].childNodes[1].innerHTML = "";
+      console.log(arguments[i][j].childNodes[3].classList.remove("double-digits"));
+    } 
+
+  }
+}
 
 // Check weight
 function checkWeight() {
 
   if (remaining === 3) {
-    skyInstructions.style.opacity = "0";
-    setTimeout(function() {
-      skyInstructions.style.display = "none";
-    }, 250);
-
+    makeInvisible(skyInstructions);
   }
 
   if (remaining === 0) {
     return;
   }
+
+  // Make meeples unclickable for duration
+  makeVisible(preventClick);
 
   // Count on each side
   let leftNo = 0;
@@ -216,16 +299,16 @@ function checkWeight() {
   checkEven(leftNo, rightNo, leftWeight, rightWeight);
 }
 
-
-
 // Check left and right have same number of villagers
 function checkEven(leftNo, rightNo, leftWeight, rightWeight) {
   if (leftNo !== rightNo) {
+    makeInvisible(preventClick);
     alert("Not even!");
     return;
   }
 
   else if (leftNo === 0) {
+    makeInvisible(preventClick);
     alert("No villagers to weigh!");
     return;
   }
@@ -239,37 +322,43 @@ function checkEven(leftNo, rightNo, leftWeight, rightWeight) {
 // Move the seesaw depending on weight
 function useSeesaw(leftWeight, rightWeight) {
 
+  makeInvisible(weighBtnHolder);
+
   for (var i = 0; i < meeples.length; i++) {
     if (!meeples[i].classList.contains("dropped-left") && !meeples[i].classList.contains("dropped-right")) {
-      meeples[i].classList.add("meeple-hidden");
+      makeInvisible(meeples[i]);
     };
   };
 
-  seesaw.className = "wobble-group";
+  seesaw.className = "seesaw-and-meeples";
   let outcome;
 
-  setTimeout(function() {
+  setTimeout(() => {
 
     let lastWeigh = "";
 
     if (remaining === 1) {
       lastWeigh = "last-";
     }
-    // Balance
-    if (leftWeight === rightWeight) {
-      seesaw.classList.add(`${lastWeigh}wobble`);
-      outcome = "even";
+
+    else if (leftWeight == 1) {
+      seesaw.classList.add(`${lastWeigh}lighter`);
+      outcome = "lighter";
+    }
+    
+     else if (leftWeight == 2) {
+      seesaw.classList.add(`${lastWeigh}heavier`);
+      outcome = "heavier"
     }
 
-    // Left heavier
-    else if (leftWeight > rightWeight) {
+    else if (rightWeight == 1) {
       seesaw.classList.add(`${lastWeigh}heavier`);
       outcome = "heavier";
     }
-    // Right heavier
-    else {
+
+     else if (leftWeight == 2) {
       seesaw.classList.add(`${lastWeigh}lighter`);
-      outcome = "lighter";
+      outcome = "lighter"
     }
 
     saveHistory(outcome);
@@ -278,70 +367,234 @@ function useSeesaw(leftWeight, rightWeight) {
   
 }
 
+function generateHistory (historyNo, outcome) {
 
-function generateCanvas (canvasNo, outcome) {
+  let leftDropped = [];
+  let rightDropped = [];
 
-  html2canvas(document.querySelector("#capture"), {
-    scrollY: -window.scrollY,
-    backgroundColor: null,
-    removeContainer: false,
-    ignoreElements: function (element) {
-
-      if (element.classList.contains("meeple")) {
-        if (!element.classList.contains("dropped-left") && !element.classList.contains("dropped-right")) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].classList.contains("dropped-left")) {
+      leftDropped.push(meeples[i]);
     }
-  }).then(canvas => {
-    canvasNo.appendChild(canvas);
-    canvasNo.childNodes[3].classList.add(`canvas-${outcome}`);
-  });  
 
-}
+    else if (meeples[i].classList.contains("dropped-right")) {
+      rightDropped.push(meeples[i]);
+    }
 
-// Screenshot last move
+    else {
+      continue;
+    };
+  };
+
+  if (historyNo === firstHistory) {
+
+    generateHistoryMeeples(leftDropped, FH_leftMeeples, "FH_text");
+    generateHistoryMeeples(rightDropped, FH_rightMeeples, "FH_text");
+    rotateHistory(outcome, FH_template);
+  }
+
+  else {
+    generateHistoryMeeples(leftDropped, SH_leftMeeples, "SH_text");
+    generateHistoryMeeples(rightDropped, SH_rightMeeples, "SH_text");
+    rotateHistory(outcome, SH_template);    
+  };
+};
+
+// Style the meeples on the history canvas
+function generateHistoryMeeples(droppedSide, meepleSide, textClassName) {
+  for (let i = 0; i < droppedSide.length; i++) {
+    if (droppedSide[i].textContent.trim().length == 2) {
+      meepleSide[i].getElementsByClassName(textClassName)[0].classList.add("double-digits");
+    }
+    meepleSide[i].style.fill = droppedSide[i].getElementsByTagName("svg")[0].getAttribute("fill");
+    meepleSide[i].style.stroke = "#fff";
+    meepleSide[i].childNodes[3].childNodes[1].innerHTML = droppedSide[i].textContent.trim();
+  };
+};
+
+// Rotate history canvas
+function rotateHistory(outcome, template) {
+  if (outcome === "heavier") {
+    template.style.transform = "rotate(-20deg)";
+  };
+
+  if (outcome === "lighter") {
+    template.style.transform = "rotate(20deg)";
+  };
+};
+
+// Save last move to history template
 function saveHistory(outcome) {
 
-
   if (remaining === 3) {
-    setTimeout(function() {
-      canvasContainer.style.opacity = "1";
-      canvasContainer.childNodes[3].style.opacity = "1";
+    setTimeout(() => {
+      makeVisible(firstHistory);
+      makeVisible(weighBtnHolder);
     }, 3000);
-    generateCanvas(firstCanvas, outcome);
+    generateHistory(firstHistory, outcome);
   }
 
   else if (remaining === 2) {
-    setTimeout(function() {generateCanvas(secondCanvas, outcome)}, 3000);
-  }
+    setTimeout(() => {
+      makeVisible(secondHistory);
+      makeVisible(weighBtnHolder);
+    }, 3000);
+    generateHistory(secondHistory, outcome);
+  };
 
   remaining--;
-  if (remaining === 0) {
-    meepleHolder.style.display = "none";
-    weighBtn.classList.add("hidden");
-  }
 
-  setTimeout(function() {
+  if (remaining === 0) {
+    weighBtnHolder.classList.add("hidden");
+  };
+
+  setTimeout(() => {
     for (let i = 0; i < meeples.length; i++) {
-      meeples[i].classList.remove("meeple-hidden");
+      makeVisible(meeples[i]);
     };
     seesaw.classList.remove("wobble");
     seesaw.classList.remove("heavier");
     seesaw.classList.remove("lighter");
-  }, 4500);
+    makeInvisible(preventClick);
+  }, 3001);
 
   // Update text for remaining
-  remainingCount.innerHTML = remaining;
- 
+  if (remaining == 1) {
+    remainingCount.innerHTML = `${remaining} use remaining`;
+  } else {
+    remainingCount.innerHTML = `${remaining} uses remaining`;
+  };
+};
+
+function toggleNotepad() {
+
+  openNotepad.removeEventListener("click", toggleNotepad);
+  notepadClose.removeEventListener("click", toggleNotepad);
+
+  // If notepad is currently closed
+  if (notepadOpen === false) {
+
+    // Move on screen
+    notepad.classList.add("notepad-move");
+    notepad.childNodes[1].style.transition = "0ms";
+    notepad.childNodes[1].style.transform = "translate(0, 0)";
+    notepad.style.transform = "translate(0, 0)";
+    notepadBack.style.animationDelay = "1ms";
+
+    // Flip pages after movement
+    setTimeout(() => {
+
+      // Flip cover
+      notepadCover.classList.remove("close-cover");
+      notepadCover.classList.add("open-cover");
+
+      // Flip pages
+      for (let i = 0; i < notepadPages.length; i++) {
+        notepadPages[i].classList.remove("close-notepad");
+        notepadPages[i].classList.add("open-notepad");
+      }
+    }, 500);
+
+    // Add event listeners back
+    setTimeout(() => {
+      notepadOpen = true;
+      enableNotepadToggle();
+    }, 1500);
+  }
+
+
+  // If notepad is currently open
+  else if (notepadOpen === true) {
+
+    // Flip cover
+    notepadCover.classList.remove("open-cover");
+    notepadCover.classList.add("close-cover");
+
+    notepadBack.style.animationDelay = "499ms";
+
+    // Flip pages
+    for (let i = (notepadPages.length - 1); i >= 0; i--) {
+      notepadPages[i].classList.remove("open-notepad");
+      notepadPages[i].classList.add("close-notepad");
+    };
+    
+
+    // Move off screen after closing
+    setTimeout(() => {
+      notepad.classList.remove("notepad-move");
+      notepad.childNodes[1].style.transition = "500ms all ease-in-out";
+      notepad.childNodes[1].style.transform = "translate(0, 0)";
+      notepad.style.transform = "translate(600px, 0)";
+      notepad.childNodes[1].setAttribute('data-x', 0);
+      notepad.childNodes[1].setAttribute('data-y', 0);
+
+    }, 1700);
+
+
+    // Add event listeners back
+    setTimeout(() => {
+      notepadOpen = false;
+      enableNotepadToggle();
+      
+    }, 2300);
+  };
+};
+
+// Re-enable notepad movement
+function enableNotepadToggle () {
+  openNotepad.addEventListener("click", toggleNotepad);
+  notepadClose.addEventListener("click", toggleNotepad);
+};
+
+// Toggle showing guess
+function toggleVisible (el) {
+  if (el.classList.contains("invisible")) {
+    makeVisible(el);
+  }
+  else {
+    makeInvisible(el);
+  }
 }
 
-// Keep this - this is for actually dragging
+// Submit guess
+function makeGuess () {
+  // Find the guessed meeple
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].classList.contains("dropped-guess")) {
+
+      // If guessed meeple is correct
+      if (i == target) {
+        
+        // Check weight guess
+        for (let i = 0; i < radioGuess.length; i++) {
+
+          if (radioGuess[i].checked) {
+
+            // Correct weight
+            if (radioGuess[i].value == weight) {
+              alert("Correct!");
+              return;
+            }
+            // Incorrect weight
+            else {
+              alert("Incorrect! You had the right meeple, but the incorrect weight!");
+              return;
+            };
+          };
+        };
+      };
+    };
+  };
+
+  alert("Incorrect! Sorry!");
+  return;
+}
+
+
+// MEEPLE DRAGGING
 function dragMoveListener (event) {
-  var target = event.target
+
+  var target = event.target;
 
   target.classList.remove("dropped-left");
   target.classList.remove("dropped-right");
@@ -422,53 +675,261 @@ interact('.dropzone').dropzone({
 
 interact('.drag-drop')
 
-.draggable({
-  inertia: false,
-  listeners: { move: dragMoveListener }
-})
+  .draggable({
+    inertia: false,
+    ignoreFrom: 'input, textarea',
+    listeners: { move: dragMoveListener }
+  })
 
 
 
-// Open guess form
-let guessBtn = document.getElementById("guess");
-let guessContainer = document.getElementById("guessContainer");
-let guessSub = document.getElementById("submitGuess");
 
-guessBtn.addEventListener("click", function() {
-  guessContainer.classList.toggle("hidden");
+
+
+
+// Solution possible outcomes
+const branches = {
+  // B = balance | N = no balance
+
+  // Balancing first page
+  B: {
+    title: "1<sup>st</sup> Move Balanced",
+    instructions: "<p>The oddly weighted villager must be 9, 10, 11, or 12.</p><p>Weigh 1, 2, 3 against 9, 10, 11, keeping 12 aside.</p>",
+    img: "b.png",
+    pageNo: 2,
+    last: false,
+
+    B: {
+      title: "2<sup>nd</sup> Move Balanced",
+      instructions: "<p>The oddly weighted villager must be villager 12 - the only one we haven't weighed</p><p>Weigh 12 against any other villager to know if it is heavier or lighter",
+      img: "bb.png",
+      pageNo: 3,
+      last: true
+    },
+
+    N: {
+      title: "2<sup>nd</sup> Move Didn't balance",
+      instructions: "<p>The oddly weighted villager is one of the three we added to the seesaw in the last step (9, 10, 11)</p><p>They are heavier or lighter depending on which way the seesaw tilted in the last weighing.<p>Weigh 9 against 10, keeping 11 aside</p>",
+      img: "bn.png",
+      pageNo: 3,
+      last: false,
+
+      B: {
+        title: "3<sup>rd</sup> Move Balanced",
+        instructions: "<p>11 - which we had set aside - must be oddly weighted</p><p>Villager 11 is heavier or lighter depending on which way it tilted the seesaw in the 1<sup>st</sup> move</p>",
+        img: "",
+        pageNo: 4,
+        last: true
+      },
+
+      N: {
+        title: "3<sup>rd</sup> Move Didn't balance",
+        instructions: "<p>If the seesaw tilted in the opposite direction this time, it must be the villager we moved to the left side (9)</p><p>Otherwise, it must be the villager that remained on the right (10)</p>",
+        img: "",
+        pageNo: 4,
+        last: true
+      }
+    }
+  },
+  // Not balancing first page
+  N: {
+    title: "1<sup>st</sup> Move Didn't balance",
+    instructions: "<p>The oddly weighted villager must be on the seesaw (1-8).</p><p>Set 7 and 8 aside.<br>Weigh 1, 2, 5 against 3, 4, 6.</p>",
+    img: "n.png",
+    pageNo: 2,
+    last: false,
+
+    B: {
+      title: "2<sup>nd</sup> Move Balanced",
+      instructions: "<p>The oddly weighted villager must be one of the two we set aside (7-8)</p><p>Weigh any balancing villager (1-6, 9-12) against 7</p>",
+      img: "nb.png",
+      pageNo: 3,
+      last: false,
+      
+      B: {
+        title: "3<sup>rd</sup> Move Balanced",
+        instructions: "<p>Villager 8 must be oddly weighted.</p><p>8 will be heavier or lighter depending on whether the right side was heavier or lighter in the 1<sup>st</sup> weighing",
+        img: "",
+        pageNo: 4,
+        last: true
+      },
+
+      N: {
+        title: "3<sup>rd</sup> Move Didn't Balance",
+        instructions: "<p>Villager 7 must be oddly weighted</p><p>7 will heavier or lighter depending on the results of this weighing</p>",
+        img: "",
+        pageNo: 4,
+        last: true
+      }
+    },
+    
+    N: {
+      title: "2<sup>nd</sup> Move Didn't Balance",
+      instructions: "<p>If the heavier side stayed the same, it must be 1, 2, or 6 - which did not move between weighings</p><p>Set villager 6 aside<br>Weigh 1 against 2.</p>",
+      img: "nn.png",
+      pageNo: 3,
+      last: false,
+      
+      B: {
+        title: "3<sup>rd</sup> Move Balance",
+        instructions: "<p>Villager 6 must be oddly weighted</p><p>6 will be heavier or lighter depending on which way the seesaw leaned in the last weighing</p>",
+        img: "",
+        pageNo: 4,
+        last: true
+      },
+      N: {
+        title: "3<sup>rd</sup> Move Didn't Balance",
+        instructions: "<p>If the left side was heavier in the 1<sup>st</sup> move, then we know that the target villager is heavier</p><p>Therefore, 1 or 2 would be the target depending on which weighs the seesaw down</p>",
+        img: "",
+        pageNo: 4,
+        last: true
+      }
+    }
+  }
+};
+
+
+// Render solution pages
+let pagesHolder = document.getElementById("pagesHolder");
+let page2 = document.getElementById("page2");
+let page3 = document.getElementById("page3");
+let page4 = document.getElementById("page4");
+
+// Page 1
+let page1_balance = document.getElementById("page1_balance");
+let page1_noBalance = document.getElementById("page1_noBalance");
+
+// Scroll to next page from first page
+page1_balance.addEventListener("click", () => {
+  page2.innerHTML = generateSolution(branches.B);
+  solutionScroll(1);
 });
 
-// Submit guess
-guessSub.addEventListener("click", function() {
+page1_noBalance.addEventListener("click", () => {
+  page2.innerHTML = generateSolution(branches.N);
+  solutionScroll(1);
+});
 
-  // Find the guessed meeple
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].classList.contains("dropped-guess")) {
+// Function to move to next solution page
+function solutionScroll (pageNo) {
 
-      // If guessed meeple is correct
-      if (i == target) {
-        
-        // Check weight guess
-        for (let i = 0; i < radioGuess.length; i++) {
+  if (pageNo === 1) {
+    pagesHolder.style.transform = "translateY(-25%)";
+  } else if (pageNo === 2) {
+    pagesHolder.style.transform = "translateY(-50%)";
+  } else if (pageNo === 3) {
+    pagesHolder.style.transform = "translateY(-75%)";
+  } else {
+    pagesHolder.style.transform = "translateY(0%)";
 
-          if (radioGuess[i].checked) {
+    // Clear the solution pages
+    setTimeout(() => {
+      page2.innerHTML = "";
+      page3.innerHTML = "";
+      page4.innerHTML = "";
+    }, 500);
+  }
+}
 
-            // Correct weight
-            if (radioGuess[i].value == weight) {
-              alert("Correct!");
-              return;
-            }
-            // Incorrect weight
-            else {
-              alert("Incorrect! You had the right meeple, but the incorrect weight!");
-              return;
-            };
-          };
-        };
-      };
-    };
-  };
+// Function to generate page
+function generateSolution (branch) {
 
-  alert("Incorrect! Sorry!");
-  return;
-})
+  let innerHTML = "";
+  let nextPage = "";
+
+  innerHTML = `
+    <div class="solution-title">
+      <h4>${branch.title}</h4>
+    </div>
+    
+    <div class="back-btn" id="back${branch.pageNo}">
+      <svg viewbox="0 0 100 100">
+        <g>
+          <line x1="10" y1="50" x2="90" y2="50" class="arrow-line";/>
+          <line x1="90" y1="50" x2="60" y2="30" class="arrow-line";/>
+          <line x1="90" y1="50" x2="60" y2="70" class="arrow-line";/>
+        </g>
+      </svg>
+    </div>
+    <div class="steps">
+      ${branch.instructions}
+    </div>
+  <img src="images/results/${branch.img}">`
+
+  if (branch.last == false) {
+    nextPage = `
+      <div class="next-page">
+        <p>Next, If the seesaw...</p>
+        <button id="page${branch.pageNo}_balance">Balances</button>
+        <button id="page${branch.pageNo}_noBalance">Doesn't balance</button>
+      </div>`
+
+  } else {
+    nextPage = `
+    <div class="next-page">
+      <button id="solutionHome">Return to start</button>
+    </div>    
+    `
+  }
+
+
+  setTimeout(() => {solutionListeners(branch);}, 500);
+
+
+
+  let returnedHTML = innerHTML + nextPage;
+  return returnedHTML;
+
+}
+
+// Add event listeners to new buttons
+function solutionListeners (branch) {
+
+  let nextPage = document.getElementById(`page${(branch.pageNo + 1)}`);
+  let backBtn = document.getElementById(`back${branch.pageNo}`);
+
+  backBtn.addEventListener("click", () => {
+    solutionScroll((branch.pageNo - 2));
+  });
+
+  // If not the last page in the branch
+  if (branch.last == false) {
+
+    // Go to next B in the branch
+    document.getElementById(`page${branch.pageNo}_balance`).addEventListener("click", () => {
+      nextPage.innerHTML = generateSolution(branch.B);
+      solutionScroll(branch.pageNo);
+    });
+
+    // Go to next N in the branch
+    document.getElementById(`page${branch.pageNo}_noBalance`).addEventListener("click", () => {
+      nextPage.innerHTML = generateSolution(branch.N);
+      solutionScroll(branch.pageNo);
+    });
+  }
+
+  // If no more pages afterwards
+  else {
+    document.getElementById("solutionHome").addEventListener("click", () => {solutionScroll("last")})
+  } 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Guess meeples
+let guessMeeples = document.querySelectorAll(".guess-label");
+
+// On radio select, make all of them filtered (add class for grayscale)
+// First meeple is black so also needs to be inverted
+
+
+// TODO TODO TODO TODO 
