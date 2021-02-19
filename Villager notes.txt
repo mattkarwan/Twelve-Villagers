@@ -1,6 +1,32 @@
-How to save a copy of the weighing result?
+Issues:
+
+- Need to save the 3rd move so that rotation is fixed?
+- Drop shadow being cut off at top of screen due to 10px offset
+- Contrast on buttons isn't sufficient
+- Change meeples.length to (let i = 0; let j = meeples.length; i < j; i++)
+- Add option to view rules to the nav
+- Make the nav invisible from the start
+- Add hover effects to everything
+- Make nav look more clickable
+- Make rules and solution look consistent
+- Make meeple holder invisible (also too dark rn)
+
+IMPORTANT -- Change from alert if villager numbers aren't even
+
+Weighing
+    Fix up animations for weighing
+
+Solution
+    Add a span tag to instructions in the solution to make them stand out
+    Get screenshots of guesses for solution
+
+Guess
+    
+    Fix up text-alignment of envelope contents meeple
+    Need a function to reset the guess form when clicking play again
 
 
-- Have invisible divs and populate with meeple data?
 
-Click next --> reset seesaw and generate history div
+AFTER FINISHING THIS PROJECT
+
+    Add a demo account to turtle broadband for employers to use

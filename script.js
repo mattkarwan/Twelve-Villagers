@@ -9,17 +9,16 @@ let remainingCount = document.getElementById("remainingCount");
 let historyContainer = document.getElementById("historyContainer");
 let firstHistory = document.getElementById("firstHistory");
 let secondHistory = document.getElementById("secondHistory");
-let radioGuess = document.querySelectorAll(".radio-weight");
 let newGameBtn = document.getElementById("newGame");
 let meepleHolder = document.getElementById("meepleHolder");
 let resetMeepleBtn = document.getElementById("resetMeeples");
-let guessForm = document.getElementById("guessForm");
 let sign = document.getElementById("sign");
 let startBtn = document.getElementById("getStarted");
 let clouds = document.getElementById("clouds");
 let introText = document.getElementById("introText");
 let skyInstructions = document.getElementById("skyInstructions")
 let nav = document.getElementById("nav");
+let rulesContainer = document.getElementById("rulesContainer");
 let openNotepad = document.getElementById("openNotepad");
 let notepad = document.getElementById("notepad");
 let notepadCover = document.getElementById("notepadCover");
@@ -31,20 +30,47 @@ let viewSolution = document.getElementById("viewSolution");
 let solution = document.getElementById("solution");
 let solutionInfo = document.getElementById("solutionInfo");
 let solutionClose = document.getElementById("solutionClose");
-let guessBtn = document.getElementById("guess");
-let guessContainer = document.getElementById("guessContainer");
-let guessSub = document.getElementById("submitGuess");
+
 let FH_template = document.getElementById("FH_template");
 let RH_template = document.getElementById("SH_template");
 let preventClick = document.getElementById("preventClick");
+
+// Envelope
+let envelopeForeground = document.getElementById("envelopeForeground");
+let envelopeBackground = document.getElementById("envelopeBackground");
+let envelopeTop = document.getElementById("envelopeTop");
+let envelopeTopHide = document.getElementById("envelopeTopHide");
+let envelopeContents = document.getElementById("envelopeContents");
+let envelopeOutcome = document.getElementById("envelopeOutcome");
+let envelopeText = document.getElementById("envelopeText");
+let guessAgainBtn = document.getElementById("guessAgainBtn");
+let envelopeBlackout = document.getElementById("envelopeBlackout");
+let winLossHolder = document.getElementById("winLossHolder");
+
+
+// Guessing
+let openGuessBtn = document.getElementById("openGuess");
+let guessContainer = document.getElementById("guessContainer");
+let guessMeeples = document.querySelectorAll(".guess-checkbox");
+let guessSub = document.getElementById("guessSub");
+let guessLighter = document.getElementById("guessLighter");
+let guessHeavier = document.getElementById("guessHeavier");
+
+// Play again after making guess
+let winLossPlayAgain = document.getElementById("winLossPlayAgain");
+let winLossViewSolution = document.getElementById("winLossViewSolution");
 
 
 // Meeples from history template
 let FH_leftMeeples = document.querySelectorAll(".FH_left-meeple");
 let FH_rightMeeples = document.querySelectorAll(".FH_right-meeple");
-
 let SH_leftMeeples = document.querySelectorAll(".SH_left-meeple");
 let SH_rightMeeples = document.querySelectorAll(".SH_right-meeple");
+
+// Submit guess
+let winStatus = document.getElementById("winStatus");
+let winDescription = document.getElementById("winDescription");
+let winCongrats = document.getElementById("winCongrats");
 
 // JS Variables
 const meepleLocations = [];
@@ -52,16 +78,11 @@ let remaining = 3;
 let target = Math.floor(Math.random() * meeples.length);
 let weight = Math.floor(Math.random() * 2) + 1;
 let guessedMeeple;
-let z = 0;
 let notepadOpen = false;
 
-// Reset body position on page refresh - MIGHT NOT NEED THIS
-// window.onbeforeunload = function () {
-//   homeArea.style.transition = "0ms";
-//   gameArea.style.transition = "0ms";
-//   homeArea.style.transform = "translatey(0)";
-//   gameArea.style.transform = "translatey(100vh)";
-// }
+// Timeouts
+let envelopeLeaveTimer;
+let winLossTimer;
 
 // Start game
 startBtn.addEventListener("click", startGame);
@@ -75,26 +96,60 @@ resetMeepleBtn.addEventListener("click", meepleStart);
 // Weight on left and right
 weighBtn.addEventListener("click", checkWeight);
 
+// Open rules
+document.getElementById("viewRules").addEventListener("click", () => {
+  makeVisible(rulesContainer);
+})
+
+// Close rules
+document.getElementById("rulesClose").addEventListener("click", () => {
+  makeInvisible(rulesContainer);
+});
+
+// Close main element when clicking on black backgrounds
+bgClickClose(rulesContainer, guessContainer, solution);
+
 // Toggle notepad
 openNotepad.addEventListener("click", toggleNotepad);
 notepadClose.addEventListener("click", toggleNotepad);
 
-// View solution
-viewSolution.addEventListener("click", () => toggleVisible(solution));
-
-// Close solution
-solution.addEventListener("click", (e) => {
-  if (e.target.contains(solutionInfo) || e.target.contains(solutionClose)) {
-    toggleVisible(solution)
-  }
-});
+// Toggle solution
+viewSolution.addEventListener("click", () => {makeVisible(solution)});
+solutionClose.addEventListener("click", () => {makeInvisible(solution);});
 
 // Show make guess button
-guessBtn.addEventListener("click", () => toggleVisible(guessContainer));
+openGuessBtn.addEventListener("click", () => makeVisible(guessContainer));
+guessLighter.addEventListener("click", checkSubmitReady);
+guessHeavier.addEventListener("click", checkSubmitReady);
+guessSub.addEventListener("click", makeGuess);
 
-// Submit guess
-//guessSub.addEventListener("click", makeGuess);
+// Close envelope
+document.getElementById("guessClose").addEventListener("click", () => {
+  makeInvisible(guessContainer);
+})
 
+// Submitting guess
+guessSub.addEventListener("click", () => {
+  makeVisible(envelopeBlackout);
+  playAnimation(envelopeBackground, envelopeForeground, envelopeTop, envelopeTopHide, envelopeContents);
+  makeVisible(envelopeBackground);
+
+  envelopeLeaveTimer = setTimeout(() => {    
+    envelopeForeground.style.animationName = "envelope-leave";
+    envelopeBackground.style.animationName = "envelope-leave";
+  }, 4900);
+
+
+  winLossTimer = setTimeout(() => {
+    makeVisible(winLossHolder);
+  }, 6000);
+});
+
+
+winLossPlayAgain.addEventListener("click", newGame);
+winLossViewSolution.addEventListener("click", () => makeVisible(solution))
+
+// Prevent clicking and dragging on notepad --> TODO check if this is needed
 document.body.addEventListener("click", (e) => {
   if (e.target == notepadInput) {
     e.preventDefault;
@@ -111,8 +166,6 @@ function appHeight () {
 } 
 appHeight()
 
-// Move back to home page on window reload
-
 
 
 function makeInvisible () {
@@ -125,7 +178,7 @@ function makeInvisible () {
 function makeVisible () {
   for (let i = 0; i < arguments.length; i++) {
 
-    if (arguments[i].classList.contains("invisible")) {3
+    if (arguments[i].classList.contains("invisible")) {
 
       arguments[i].classList.remove("invisible");
       arguments[i].classList.add("visible");
@@ -137,11 +190,11 @@ function makeVisible () {
   }
 }
 
-
 function startGame () {
   // Move sign + hide intro/button
   sign.style.transform = "translatey(-700px)";
   makeInvisible(introText, startBtn);
+  generateEnvelope();
 
 
   setTimeout(() => {
@@ -207,19 +260,25 @@ function newGame() {
   // Reset moves count
   remaining = 3;
   remainingCount.innerHTML = `${remaining} uses remaining`;
+  makeVisible(weighBtnHolder);
 
   // Clear history
   clearHistory();
 
-
   // Remove seesaw and meeple classes
   seesaw.className = "seesaw-and-meeples";
 
-  // Reset guess form
-  guessContainer.classList.add("hidden");
-  guessForm.reset();
+
+  makeInvisible(guessContainer);
 
   makeVisible(skyInstructions);
+
+  makeInvisible(guessContainer);
+
+  // Reset guess container to start
+  resetEnvelope();
+
+  openGuessBtn.innerText = "Make your guess";
 
 }
 
@@ -245,7 +304,7 @@ function clearMeeples() {
       arguments[i][j].style.fill = "none";
       arguments[i][j].style.stroke = "none";
       arguments[i][j].childNodes[3].childNodes[1].innerHTML = "";
-      console.log(arguments[i][j].childNodes[3].classList.remove("double-digits"));
+      arguments[i][j].childNodes[3].classList.remove("double-digits");
     } 
 
   }
@@ -256,10 +315,6 @@ function checkWeight() {
 
   if (remaining === 3) {
     makeInvisible(skyInstructions);
-  }
-
-  if (remaining === 0) {
-    return;
   }
 
   // Make meeples unclickable for duration
@@ -318,11 +373,10 @@ function checkEven(leftNo, rightNo, leftWeight, rightWeight) {
   }
 }
 
-
 // Move the seesaw depending on weight
 function useSeesaw(leftWeight, rightWeight) {
 
-  makeInvisible(weighBtnHolder);
+  makeInvisible(weighBtnHolder, meepleHolder, openGuessBtn, nav);
 
   for (var i = 0; i < meeples.length; i++) {
     if (!meeples[i].classList.contains("dropped-left") && !meeples[i].classList.contains("dropped-right")) {
@@ -341,24 +395,28 @@ function useSeesaw(leftWeight, rightWeight) {
       lastWeigh = "last-";
     }
 
-    else if (leftWeight == 1) {
+    if (leftWeight === 1) {
       seesaw.classList.add(`${lastWeigh}lighter`);
       outcome = "lighter";
     }
     
-     else if (leftWeight == 2) {
+     else if (leftWeight === 2) {
       seesaw.classList.add(`${lastWeigh}heavier`);
       outcome = "heavier"
     }
 
-    else if (rightWeight == 1) {
+    else if (rightWeight === 1) {
       seesaw.classList.add(`${lastWeigh}heavier`);
       outcome = "heavier";
     }
 
-     else if (leftWeight == 2) {
+     else if (leftWeight === 2) {
       seesaw.classList.add(`${lastWeigh}lighter`);
       outcome = "lighter"
+    }
+
+    else {
+      seesaw.classList.add("wobble");
     }
 
     saveHistory(outcome);
@@ -367,6 +425,7 @@ function useSeesaw(leftWeight, rightWeight) {
   
 }
 
+// Display first and second history
 function generateHistory (historyNo, outcome) {
 
   let leftDropped = [];
@@ -396,7 +455,7 @@ function generateHistory (historyNo, outcome) {
   else {
     generateHistoryMeeples(leftDropped, SH_leftMeeples, "SH_text");
     generateHistoryMeeples(rightDropped, SH_rightMeeples, "SH_text");
-    rotateHistory(outcome, SH_template);    
+    rotateHistory(outcome, SH_template);
   };
 };
 
@@ -428,16 +487,14 @@ function saveHistory(outcome) {
 
   if (remaining === 3) {
     setTimeout(() => {
-      makeVisible(firstHistory);
-      makeVisible(weighBtnHolder);
+      makeVisible(firstHistory, weighBtnHolder, weighBtnHolder, meepleHolder, openGuessBtn, nav);
     }, 3000);
     generateHistory(firstHistory, outcome);
   }
 
   else if (remaining === 2) {
     setTimeout(() => {
-      makeVisible(secondHistory);
-      makeVisible(weighBtnHolder);
+      makeVisible(secondHistory, weighBtnHolder, weighBtnHolder, meepleHolder, openGuessBtn, nav);
     }, 3000);
     generateHistory(secondHistory, outcome);
   };
@@ -445,7 +502,12 @@ function saveHistory(outcome) {
   remaining--;
 
   if (remaining === 0) {
-    weighBtnHolder.classList.add("hidden");
+    makeInvisible(weighBtnHolder, weighBtn);
+
+    setTimeout(() => {
+      makeVisible(weighBtnHolder, remainingCount, meepleHolder, openGuessBtn, nav);
+    }, 3000);
+
   };
 
   setTimeout(() => {
@@ -466,6 +528,7 @@ function saveHistory(outcome) {
   };
 };
 
+// Show notepad
 function toggleNotepad() {
 
   openNotepad.removeEventListener("click", toggleNotepad);
@@ -546,52 +609,7 @@ function enableNotepadToggle () {
   notepadClose.addEventListener("click", toggleNotepad);
 };
 
-// Toggle showing guess
-function toggleVisible (el) {
-  if (el.classList.contains("invisible")) {
-    makeVisible(el);
-  }
-  else {
-    makeInvisible(el);
-  }
-}
-
-// Submit guess
-function makeGuess () {
-  // Find the guessed meeple
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].classList.contains("dropped-guess")) {
-
-      // If guessed meeple is correct
-      if (i == target) {
-        
-        // Check weight guess
-        for (let i = 0; i < radioGuess.length; i++) {
-
-          if (radioGuess[i].checked) {
-
-            // Correct weight
-            if (radioGuess[i].value == weight) {
-              alert("Correct!");
-              return;
-            }
-            // Incorrect weight
-            else {
-              alert("Incorrect! You had the right meeple, but the incorrect weight!");
-              return;
-            };
-          };
-        };
-      };
-    };
-  };
-
-  alert("Incorrect! Sorry!");
-  return;
-}
-
-
-// MEEPLE DRAGGING
+// Meeple dragging
 function dragMoveListener (event) {
 
   var target = event.target;
@@ -614,6 +632,80 @@ function dragMoveListener (event) {
   target.setAttribute('data-y', y)
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TEST window resize
+
+window.addEventListener('resize', () => {
+
+  // meepleStart();  
+
+  // for (let i = 0; i < meeples.length; i++) {
+  //   if (meeples[i].classList.contains("dropped-left")) {
+
+  //   }
+
+  //   else if (meeples[i].classList.contains("dropped-right")) {
+
+  //   }
+
+  //   else {
+
+  //   }
+  // }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Dropzone
 interact('.dropzone').dropzone({
@@ -680,12 +772,6 @@ interact('.drag-drop')
     ignoreFrom: 'input, textarea',
     listeners: { move: dragMoveListener }
   })
-
-
-
-
-
-
 
 // Solution possible outcomes
 const branches = {
@@ -787,7 +873,6 @@ const branches = {
     }
   }
 };
-
 
 // Render solution pages
 let pagesHolder = document.getElementById("pagesHolder");
@@ -914,22 +999,225 @@ function solutionListeners (branch) {
   } 
 }
 
+// Guess meeples -- TODO make this a function? idk looks wrong
+for (let i = 0; i < guessMeeples.length; i++) {
+  guessMeeples[i].addEventListener("click", checkSubmitReady);
+  guessMeeples[i].addEventListener("click", (e) => {
+
+    // Make other meeples grey
+    if (e.target.checked === true) {
+
+      e.target.checked = true;
+
+      // If not clicking the black meeple
+      if (e.target !== guessMeeples[0]) {
+
+        // Remove grayscale from clicked meeple
+        e.target.nextElementSibling.classList.remove("grayscale");
+
+        // Black needs to be inverted
+        guessMeeples[0].nextElementSibling.classList.add("grayscale-black");
+        guessMeeples[0].checked = false;
 
 
+        for (let j = 1; j < (guessMeeples.length); j++) {
+
+          if (e.target == guessMeeples[j]) {
+            continue;
+          } 
+          
+          else {
+            guessMeeples[j].checked = false;
+            guessMeeples[j].nextElementSibling.classList.add("grayscale");
+          }
+      
+        }
+
+      } 
+      
+      else {
+
+        e.target.nextElementSibling.classList.remove("grayscale-black");
+
+        for (let j = 1; j < (guessMeeples.length - 1); j++) {
+          guessMeeples[j].checked = false;
+          guessMeeples[j].nextElementSibling.classList.add("grayscale");
+        }
+      }
+    }
+
+    else {
+
+      for (let j = 0; j < guessMeeples.length; j++) {
+        guessMeeples[j].checked = false;
+        guessMeeples[j].nextElementSibling.classList.remove("grayscale");
+        guessMeeples[j].nextElementSibling.classList.remove("grayscale-black");
+      }
+
+    }
+  });
+}
+
+// Uncheck lighter if heavier is ticked
+guessLighter.addEventListener("click", () => {guessHeavier.checked = false;});
+guessHeavier.addEventListener("click", () => {guessLighter.checked = false;});
+
+// Check if ready to submit guess
+function checkSubmitReady () {
+  // If lighter or heavier is picked
+  if (guessLighter.checked || guessHeavier.checked) {
+
+    // If villager is selected
+    for (let i = 0; i < guessMeeples.length; i++) {
+      if (guessMeeples[i].checked === true) {
+        guessSub.classList.remove("invisible");
+        return;
+      } 
+    }
+
+    guessSub.classList.add("invisible");
+    
+  } else {
+    guessSub.classList.add("invisible");
+  }
+}
+
+function makeGuess () {
+
+  openGuessBtn.innerText = "View answer";
+
+  // Find the guessed meeple
+  for (let i = 0; i < guessMeeples.length; i++) {
+    if (guessMeeples[i].checked) {
+
+      // If guessed meeple is correct
+      if (i == target) {
+        
+        // Check weight guess
+
+        if (weight == 1) {
+          if (guessLighter.checked) {
+            feedbackMessage("Correct!", `You got it! Villager ${i + 1} was lighter!`, "Congratulations!");
+            return;
+          } else {
+            feedbackMessage("Incorrect!", `Villager ${i + 1} wasn't lighter.`, "Sorry! Try again?");
+            return;
+          }
+        } else {
+          if (guessHeavier.checked) {
+            feedbackMessage("Correct!", `You got it! Villager ${i + 1} was heavier!`, "Congratulations!");
+            return;
+          } else {
+            feedbackMessage("Incorrect!", `Sorry, villager ${i + 1} wasn't heavier.`, "Try again?");
+            return;
+          }
+        }
+      } else {
+        if (weight == 1) {
+          feedbackMessage("Incorrect!", `Sorry, villager ${i + 1} wasn't lighter!`, "Try again?");
+        } else {
+          feedbackMessage("Incorrect!", `Sorry, villager ${i + 1} wasn't heavier!`, "Try again?");
+        };
+      };
+    };
+  };
+};
+
+function feedbackMessage (correct, message, congrats) {
+  winStatus.innerText = correct;
+  winDescription.innerText = message;
+  winCongrats.innerText = congrats;
+
+  if (correct === "Correct!") {
+    winLossHolder.style.backgroundColor = "#37816A";
+  } else {
+    winLossHolder.style.backgroundColor = "#A5243D";
+  }
+};
+
+// Clicking grey background closes the element
+function bgClickClose () {
+  let j = arguments.length;
+  for (let i = 0; i < j; i++) {
+    arguments[i].addEventListener("click", (e) => {
+      if (e.target == arguments[i]) {
+        makeInvisible(arguments[i]);
+      };
+    });
+  };
+};
+
+// Generate Info Inside Envelope
+function generateEnvelope () {
+
+  let envelopeMeeple = document.getElementById("envelopeMeeple");
+  let envelopeMeepleNo = document.getElementById("envelopeMeepleNo");
+  let envelopeWeight = document.getElementById("envelopeWeight");
+
+  // Generate heading 
+
+  if (weight === 1) {
+    envelopeWeight.textContent = "Lighter";
+  } else {
+    envelopeWeight.textContent = "Heavier";
+  }
+
+  // Generate the meeple from template
+  envelopeMeeple.style.fill = meeples[target].getElementsByTagName("svg")[0].getAttribute("fill");
+  envelopeMeepleNo.innerHTML = (target + 1);
+}
+
+// Start opening the envelope
+function playAnimation () {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].style.animationPlayState = "running";
+  };
+};
+
+// Reset envelope opening animation
+function resetAnimation () {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].style.animation = "none";
+    setTimeout(() => {
+      arguments[i].style.animation = "";
+    }, 100)
+  };
+};
 
 
+// Reset envelope
+function resetEnvelope () {
+  clearTimeout(envelopeLeaveTimer);
+  clearTimeout(winLossTimer);
 
+  // Hide black overlay
+  makeInvisible(envelopeBlackout);
 
+  // Reset envelope animation
+  resetAnimation(envelopeBackground, envelopeForeground, envelopeTop, envelopeTopHide, envelopeContents);
+  
+  // Hide congratulations message
+  makeInvisible(winLossHolder);
+  
+  // Uncheck selected meeple and lighter/heavier
+  guessMeeples[0].nextElementSibling.classList.remove("grayscale");
+  guessMeeples[0].nextElementSibling.classList.remove("grayscale-black");
+  guessMeeples[0].checked = false;
 
+  let j = guessMeeples.length;
+  for (let i = 1; i < j; i++) {
 
+    guessMeeples[i].nextElementSibling.classList.remove("grayscale");
+    guessMeeples[i].checked = false;
+  };
 
+  guessHeavier.checked = false;
+  guessLighter.checked = false;
+  checkSubmitReady();
 
+  // Generate new envelope contents
+  generateEnvelope();
+}
 
-// Guess meeples
-let guessMeeples = document.querySelectorAll(".guess-label");
-
-// On radio select, make all of them filtered (add class for grayscale)
-// First meeple is black so also needs to be inverted
-
-
-// TODO TODO TODO TODO 
+// TODO - Remove when going live since start button does this anyway
+generateEnvelope();

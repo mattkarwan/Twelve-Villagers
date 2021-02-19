@@ -18,6 +18,10 @@ $handwriting: 'Chilanka', cursive;
   filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
 }
 
+// Media Queries
+$laptop: "only screen and (min-width: 769px)";
+$desktop: "only screen and (min-width: 1025px)";
+
 // Colours
   // Meeples
   $charcoal: #171926;
@@ -52,19 +56,31 @@ $handwriting: 'Chilanka', cursive;
   margin: 0;
   box-sizing: border-box;
   font-size: 16px;
-  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
   font-family: sans-serif;
   line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+
+*:focus {
+  outline: none!important;
 }
 
 body, html {
   height: var(--app-height);
-  //overflow: hidden;
+  overflow-x: hidden;
 }
 
 body {
   background: linear-gradient($skyDark, $skyLight);
   z-index: -99;
+  // overflow: hidden; TODO ADD BACK  
 }
 
 
@@ -73,12 +89,7 @@ button {
 }
 
 .move-pages {
-  animation-name: movePages;
-  animation-duration: 3500ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
-
+  animation: movePages 3500ms ease-in-out 0ms 1 normal forwards running;
 }
 
 @keyframes movePages {
@@ -95,6 +106,7 @@ button {
 
 /* Start Game page */
 .home-page {
+  position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -104,24 +116,24 @@ button {
   transition: transform 3500ms ease-in-out;
 
     .sign-holder {
-      display: none;
       display: flex;
       justify-content: center;
-      width: 70%;
-      max-width: 500px;
+      width: 60%;
+      max-width: 400px;
       z-index: -1;
       transition: 1250ms all ease-in-out;
       margin: -10px auto 50px auto;
+
+      @media #{$laptop} {
+        width: 70%;
+      }
     }
 
     svg {
       width: 100%;
       max-width: 500px;
       height: auto;
-      animation-name: sign;
-      animation-duration: 6s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
+      animation: sign 6s ease-in-out 0ms infinite normal none running;
     }
 
     @keyframes sign {
@@ -140,11 +152,11 @@ button {
       flex-direction: column;
       background: $skyDark;
       border-radius: 5px;
-      padding: 10px;
-      margin: 20px auto 20px auto;
+      padding: 5px;
+      margin: 0 5px;
 
       h2 {
-        font-size: 20px;
+        font-size: 16px;
         font-family: $sign;
         color: $white;
         border-bottom: 1px solid $white;
@@ -152,15 +164,33 @@ button {
 
       p {
         font-family: $subheadings;
-        font-size: 18px;
+        font-size: 16px;
         text-align: center;
         color: $white;
-        padding: 10px;
+        padding: 5px;
 
         span {
-          font-size: 18px;
+          font-size: 16px;
           font-family: $subheadings;
           padding-bottom: 10px;
+        }
+      }
+
+      @media #{$laptop} {
+        padding: 10px;
+        margin: 20px auto 20px auto;
+
+        h2 {
+          font-size: 20px;
+        }
+
+        p {
+          font-size: 18px;
+          padding: 10px;
+
+          span {
+            font-size: 18px;
+          }
         }
       }
     }
@@ -168,13 +198,18 @@ button {
     button {
       @include shadow;
       font-family: $sign;
-      font-size: 20px;
+      font-size: 16px;
       color: $white;
       background: $greenBtn;
       border: none;
-      display: block; // TODO change back
       border-radius: 15px;
-      padding: 20px;
+      padding: 0.4em 1em;
+      margin-top: 20px;
+
+      @media #{$laptop} {
+        padding: 20px;
+        font-size: 20px;
+      }
     }
 
  }
@@ -206,25 +241,26 @@ button {
   top: 0;
   left: -200px;
   display: flex;
-  display: none;
   flex-direction: column;
   justify-content: space-evenly;
   transition: 1500ms all ease-in-out;
 
   .cloud {
     @include drop-shadow;
-    width: 200px;
-    animation-name: cloud;
-    animation-duration: 22s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    z-index: -2;
+    width: 75px;
+    animation: cloud 22s linear 0ms infinite normal none running;
+    z-index: -11;
+
+    @media #{$laptop} {
+      width: 200px;
+    }
   }
 
 }
 
 .home-page {
   .cloud-container {
+    
     img:nth-child(2) {
       animation-delay: 20s;
     }
@@ -272,7 +308,6 @@ button {
 
 
 // Game area
-
 nav {
   position: absolute;
   top: 10px;
@@ -281,18 +316,31 @@ nav {
   opacity: 1;
   transition: opacity 500ms ease-in-out;
   z-index: 10;
+
   ul {
+    width: 100%;
     display: flex;
     list-style: none;
     float: right;
+    justify-content: space-evenly;
+    padding: 0;
+
+    @media #{$laptop} {
+      justify-content: flex-end;
+    }
+
     li {
-      button {
-        margin: 0 20px;
+      button {        
         border: none;
         background: none;
         color: $white;
-        font-size: 18px;
+        font-size: 14px;
         font-family: $sign;
+
+        @media #{$laptop} {
+          font-size: 18px;
+          margin: 0 20px;
+        }
       }
     }
   }
@@ -301,20 +349,102 @@ nav {
 .sky-instructions {
   @include absolute-center;
   @include shadow;
-  top: 200px;
+  top: 60px;
   text-align: center;
-  width: 800px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 5px;
   opacity: 1;
   transition: opacity 500ms ease-in-out;
   background: $skyDark;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
 
   p {
-    font-size: 20px;
+    font-size: 16px;
     color: $white;
     font-family: $subheadings;
+  }
+
+  @media #{$laptop} {
+    top: 200px; 
+    padding: 20px;
+
+    p {
+      font-size: 20px;
+    }
+  }
+}
+
+.rules-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.rules-holder {
+  @include shadow;
+  position: relative;
+  width: 95%;
+  max-width: 500px;
+  height: fit-content;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  background: $blueBackground;
+  padding: 20px 10px;
+
+  .rules-close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    font-size: 16px;
+    font-family: $sign;
+    font-weight: 600;
+    color: $white;
+    cursor: pointer;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-family: $sign;
+    color: $white;
+    border-bottom: 0.5px solid $white;
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin: 5px auto;
+  }
+
+  p, span {
+    text-align: center;
+    font-size: 14px;
+    color: $white;
+    font-family: $subheadings;
+
+    span {
+      font-weight: 600;
+    }
+  }
+
+  @media #{$laptop} {
+    h3 {
+      font-size: 18px;
+    }
+
+    p, span {
+      font-size: 16px;
+    }
   }
 }
 
@@ -327,17 +457,28 @@ nav {
 .meeple {
   @include drop-shadow;
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   text-align: center;
   stroke: $white;
   stroke-width: 0.5px;
   opacity: 1;
   transition: 150ms opacity ease-in-out;
+  
+
+  @media #{$laptop} {
+    width: 60px;
+    height: 60px;
+  }
 
   svg {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
+
+    @media #{$laptop} {
+      width: 50px;
+      height: 50px;
+    }
   }
   
   text {
@@ -363,20 +504,16 @@ nav {
 }
 
 .invisible {
-  animation-name: invisible;
-  animation-duration: 250ms;
-  animation-fill-mode: forwards;
+  animation: invisible 250ms ease 0ms 1 normal forwards running;
 }
 
 .visible {
-  animation-name: visible;
-  animation-duration: 250ms;
-  animation-fill-mode: forwards;
+  animation: visible 250ms ease 0ms 1 normal forwards running;
 }
 
 @keyframes invisible {
   99% {opacity: 0}
-  100%{visibility: hidden}
+  100%{ opacity: 0; visibility: hidden}
 }
 
 @keyframes visible {
@@ -387,7 +524,7 @@ nav {
 #historyContainer {
   width: 100%;
   position: absolute;
-  padding: 10px;
+  padding: 10px 0;
   height: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -396,33 +533,34 @@ nav {
   z-index: -2;
   transition: opacity 250ms ease-in-out;
 
-  h2 {
-    grid-column: span 2;
-    font-family: $sign;
-    font-size: 20px;
-    color: $black;
-  }
-
   h3 {
     font-family: $sign;
-    font-size: 20px;
-    color: $black;
+    font-size: 14px;
+    font-weight: 400;
+    color: $white;
+    margin-bottom: 10px;
+  }
+
+  @media #{$laptop} {
+    h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
   }
 }
 
 #firstHistory, #secondHistory {
   @include shadow;
   transition: 250ms opacity ease-in-out;
-  padding: 20px;
+  padding: 10px;
   width: 80%;
   max-width: 400px;
   margin: 0 auto;
   background: $blueBackground;
   border-radius: 20px;
 
-  h3 {
-    margin-bottom: 10px;
-    color: $white;
+  @media #{$laptop} {
+    padding: 20px;
   }
 
   svg {
@@ -434,6 +572,11 @@ nav {
 #seesawLog {
   @include drop-shadow;
   border-radius: 10px;
+  height: 24px;
+
+  @media #{$laptop} {
+    height: 50px;
+  }
 }
 
 
@@ -490,41 +633,23 @@ nav {
 }
 
 .lighter {
-  animation-name: lighter;
-  animation-duration: 3s;
-  animation-timing-function: linear;
+  animation: lighter 3s linear 0ms 1 normal forwards running;
 }
 
 .wobble {
-  animation-name: wobble;
-  animation-duration: 3s;
-  animation-timing-function: linear;
+  animation: wobble 3s linear 0ms 1 normal forwards running;
 }
 
 .heavier {
-  animation-name: heavier;
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  animation: heavier 3s linear 0ms 1 normal forwards running;
 }
-
 .last-heavier {
-  animation-name: last-heavier;
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  animation: last-heavier 3s linear 0ms 1 normal forwards running;
 }
 
 .last-lighter {
-  animation-name: last-lighter;
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  animation: last-lighter 3s linear 0ms 1 normal forwards running;
 }
-
-
-
-
 
 #ss-left, #ss-right {
   position: absolute;
@@ -548,59 +673,115 @@ nav {
 }
 
 .weigh-btn_holder {
-  @include absolute-center;
-  bottom: 10px;
+  position: absolute;
+  right: 5px;
+  bottom: 40px;
   display: flex;
+  width: 150px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
+  @media #{$laptop} {
+    right: 50%;
+    bottom: 10px;
+    transform: translateX(50%);
+    width: unset;
+  }
+
   button {
-    font-size: 20px;
+    font-size: 16px;
+    padding: 0.4em 0.4em;
     border: none;
     border-radius: 10px;
     background: $greenBtn;
     color: $white;
     font-family: $sign;
-    padding: 10px 20px;
+    
+
+    @media #{$laptop} {
+      font-size: 20px;
+      padding: 10px 20px;
+    }
   }
 
   p {
-    font-size: 20px;
+    font-size: 14px;
     font-family: $subheadings;
+
+    @media #{$laptop} {
+      font-size: 20px;
+    }
   }
 }
 
 .guess-btn {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 20px;
+  bottom: 5px;
+  right: 5px;
+  font-size: 14px;
   font-family: $sign;
   background: $greenBtn;
   border: none;
   border-radius: 10px;
   color: $white;
-  padding: 10px 20px;
+  padding: 0.4em 0.4em;
+  width: 150px;
+  
+
+  @media #{$laptop} {
+    font-size: 20px;
+    padding: 10px 20px;
+    bottom: 10px;
+    right: 10px;
+    width: unset;
+  }
 }
 
 
+
+// @keyframes wobble {
+//   0% {transform: rotate(0deg);}
+//   25% {transform: rotate(2deg) translatex(8px);}
+//   50% {transform: rotate(0deg);}
+//   75% {transform: rotate(-2deg) translatex(-8px);}
+//   100% {transform: rotate(0deg);}
+// }
 
 @keyframes wobble {
-  0% {transform: rotate(0deg);}
-  25% {transform: rotate(2deg) translatex(8px);}
-  50% {transform: rotate(0deg);}
-  75% {transform: rotate(-2deg) translatex(-8px);}
-  100% {transform: rotate(0deg);}
-}
+    0% {transform: rotate(0deg);}
+    25% {transform: rotate(2deg) translatex(1%);}
+    50% {transform: rotate(0deg);}
+    75% {transform: rotate(-2deg) translatex(-1%);}
+    100% {transform: rotate(0deg);}
+  }
 
+// @keyframes heavier {
+//   0% {transform: rotate(0deg);}
+//   12.5% {transform: rotate(2deg) translatex(-8px);}
+//   25% {transform: rotate(0deg);}
+//   37.5% {transform: rotate(-2deg) translatex(8px);}
+//   60% {transform: rotate(-20deg) translate(80px, 12px);}
+//   90% {transform: rotate(-20deg) translate(80px, 12px);}
+//   100% {transform: rotate(0deg);}
+// }
+
+// @keyframes lighter {
+//   0% {transform: rotate(0deg);}
+//   12.5% {transform: rotate(-2deg) translatex(8px);}
+//   25% {transform: rotate(0deg);}
+//   37.5% {transform: rotate(2deg) translatex(-8px);}
+//   60% {transform: rotate(20deg) translate(-75px, 10px);}
+//   90% {transform: rotate(20deg) translate(-75px, 10px);}
+//   100% {transform: rotate(0deg);}
+// }
 @keyframes heavier {
   0% {transform: rotate(0deg);}
-  12.5% {transform: rotate(2deg) translatex(-8px);}
+  12.5% {transform: rotate(2deg) translatex(-0.5%);}
   25% {transform: rotate(0deg);}
-  37.5% {transform: rotate(-2deg) translatex(8px);}
-  60% {transform: rotate(-20deg) translate(80px, 12px);}
-  90% {transform: rotate(-20deg) translate(80px, 12px);}
+  37.5% {transform: rotate(-2deg) translatex(0.5%);}
+  60% {transform: rotate(-20deg) translate(-4%, -2%);}
+  90% {transform: rotate(-20deg) translate(-4%, -2%);}
   100% {transform: rotate(0deg);}
 }
 
@@ -653,7 +834,11 @@ nav {
 }
 
 #inner-dropzone {
-  height: 80px;
+  height: 60px;
+
+  @media #{$laptop} {
+    height: 80px; 
+  }
 }
 
 #captureContainer {
@@ -695,11 +880,15 @@ nav {
 
 .seesaw {
   @include absolute-center;
-  bottom: 220px;
+  bottom: 180px;
   width: 90%;
   max-width: 900px;
   display: grid;
   grid-template-columns: 1fr 1fr;
+
+  @media #{$laptop} {
+    bottom: 220px;
+  }
 
 
   // Dropzones
@@ -736,6 +925,18 @@ nav {
   display: flex;
   width: 100%;
   height: 100%;
+  transform-origin: 0 100%;
+  
+  &::after {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    background: red;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+  }
 }
 
 
@@ -796,13 +997,17 @@ nav {
 .solution-holder {
   @include absolute-center;
   @include shadow;
-  top: 60px;
+  top: 10px;
   width: 90%;
   max-width: 500px;
-  height: 100%;
+  height: calc(100% - 20px);
   max-height: 600px;
   border-radius: 10px;
   overflow: hidden;
+
+  @media #{$laptop} {
+    top: 60px;
+  }
 
   .solution {
     position: relative;
@@ -842,9 +1047,13 @@ nav {
       }
 
       p {
-        font-size: 16px;
+        font-size: 14px;
         font-family: $subheadings;
         margin: 20px auto;
+
+        @media #{$laptop} {
+          font-size: 16px;
+        }
 
         sup {
           font-size: xx-small;
@@ -909,67 +1118,100 @@ nav {
   }
 }
 
-
-
-@media only screen and (min-width: 600px) {
-
-}
-
-
-
-
 //////////////////////////////// Decorative Elements ////////////////////////////
 
 // Meeple holding zone
 .meeple-area {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+  bottom: 5px;
+  left: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 1;
 
+  @media #{$laptop} {
+    bottom: 10px;
+    left: 10px;
+  }
+
   .meeple-background {
-    width: 360px;
-    height: 130px;
-    background: $black;
-    border: 1px solid $black;
+    width: 130px;
+    height: 115px;
+    background: #005597;
     border-radius: 5px;
     z-index: -1;
+
+    @media #{$laptop} {
+      width: 360px;
+      height: 130px;
+    }
   }
 
   .meeple-reset {
-    font-size: 18px;
-    padding: 5px 10px;
+    font-size: 14px;
+    padding: 0.4em 0.4em;
     font-family: $sign;
     border: none;
     border-radius: 10px;
     width: fit-content;
     background: $greenBtn;
     color: $white;
-    margin: 10px auto 0px auto;
+    
+
+    @media #{$laptop} {
+      font-size: 18px;
+      margin: 10px auto 0px auto;
+      padding: 5px 10px;
+    }
   }
 }
 
 
 @for $i from 1 through 12 {
 
-  // Meeples 9-12
-  @if $i > 6 {
+  @if $i > 8 {
+    // Meeples 9-12
     .meeple:nth-child(#{$i}) {
-      bottom: 65px;
-      left: 10px + (($i - 7) * 60);
+      bottom: 45px;
+      left: 10px + (($i - 9) * 30);
+    }
+  }
+
+  @else if $i < 9 and $i > 4 {
+    .meeple:nth-child(#{$i}) {
+      bottom: 80px;
+      left: 10px + (($i - 5) * 30);
     }
   }
 
   // Meeples 1-4
   @else {
     .meeple:nth-child(#{$i}) {
-      bottom: 125px;
-      left: 10px + (($i - 1) * 60);
+      bottom: 115px;
+      left: 10px + (($i - 1) * 30);
     }
   }
+
+  @media #{$laptop} {
+    // Meeples 9-12
+    @if $i > 6 {
+      .meeple:nth-child(#{$i}) {
+        bottom: 65px;
+        left: 10px + (($i - 7) * 60);
+      }
+    }
+
+    // Meeples 1-4
+    @else {
+      .meeple:nth-child(#{$i}) {
+        bottom: 125px;
+        left: 10px + (($i - 1) * 60);
+      }
+    }
+  }
+
+  
 
 }
 
@@ -984,6 +1226,18 @@ nav {
   background-color: #f8f0a4;
   background-image: url("images/sand.png");
   z-index: -10;
+
+  p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+
+    @media #{$laptop} {
+      font-size: 16px;
+    }
+  }
 }
 
 // Seesaw base triangle
@@ -991,25 +1245,26 @@ nav {
   @include absolute-center;
   filter: drop-shadow(-10px -5px 10px rgba(0, 0, 0, 0.3));
   bottom: 120px;
-  height: 125px;
+  height: 75px;
   width: 150px;
   z-index: -1;
+
+  @media #{$laptop} {
+    height: 125px;
+    width: 150px;
+  }
 
   .round {
     stroke: url(#wood);
     stroke-width: 10px;
     stroke-linejoin: round;
   }
-
-
 }
-
 
 // Notepad
 
 .notepad-holder {
   display: block;
-  display: none; // TODO
   position: absolute;
   right: 20px;
   bottom: 100px;
@@ -1027,22 +1282,33 @@ nav {
   @include shadow;
   border-radius:10px;
   position: relative;
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 300px;
+  
   transform-style: preserve-3d;
   perspective: 2000px;
+
+  @media #{$laptop} {
+    width: 300px;
+    height: 400px;
+  }
 }
 
 .flip-page, .writing-area {
   position: absolute;
   top: 0;
   right: 0;
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 300px;
   background-color: #f8f8f5;
   background-image: url("images/paper.png");
   border: 0.5px solid #454545;
   border-radius: 10px;
+
+  @media #{$laptop} {
+    width: 300px;
+    height: 400px;
+  }
 }
 
 
@@ -1063,9 +1329,14 @@ nav {
   background-color: #a66226;
   background-image: url("images/notepad-cover.png");
   border: 5px solid #454545;
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 300px;
   z-index: 99;
+
+  @media #{$laptop} {
+    width: 300px;
+    height: 400px;
+  }
 }
 
 @for $i from 2 through 4 {
@@ -1088,10 +1359,14 @@ nav {
     top: 10px;
     right: 20px;
     font-family: $handwriting;
-    font-size: 20px;
+    font-size: 18px;
     color: #454545;
     text-align: center;
     cursor: pointer;
+
+    @media #{$laptop} {
+      font-size: 20px;
+    }
   }
 
   .notepad-close:hover {
@@ -1109,17 +1384,19 @@ nav {
       background: none;
       margin: 25px auto 0 auto;
       border: none;
-      font-size: 20px;
+      font-size: 16px;
       font-family: $handwriting;
       color: #454545;
       resize: none;
       outline: none;
+
+      @media #{$laptop} {
+        font-size: 20px;
+      }
   }
 }
 
 .back {
-  width: 303px;
-  height: 407px;
   position: absolute;
   top: -3px;
   left: -2px;
@@ -1127,42 +1404,35 @@ nav {
   border: 5px solid #454545;
   z-index: -10;
   border-radius: 10px;
+  width: 253px;
+  height: 307px;
+
+  @media #{$laptop} {
+    width: 300px;
+    height: 400px;
+  }
 }
 
 
 
 .open-notepad {
   transform-origin: top;
-  animation-name: notepad-open;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-fill-mode: both;
+  animation: notepad-open 1s linear 0ms 1 normal both running;
 }
 
 .open-cover {
-  animation-name: notepad-cover-open;
   transform-origin: top;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-fill-mode: both;
+  animation: notepad-cover-open 1s linear 0ms 1 normal both running;
 }
 
 .close-cover {
-  animation-name: notepad-cover-close;
-  animation-delay: 500ms;
   transform-origin: top;
-  animation-duration: 1.251s;
-  animation-fill-mode: both;
-  animation-timing-function: linear;
+  animation: notepad-cover-close 1251ms linear 500ms 1 normal both running;
 }
 
 .close-notepad {
   transform-origin: top;
-  animation-name: notepad-close;
-  animation-duration: 1.25s;
-  animation-fill-mode: both;
-  animation-timing-function: linear;
-
+  animation: notepad-close 1250ms linear 0ms 1 normal both running;
 }
 
 @keyframes notepad-cover-open {
@@ -1201,22 +1471,39 @@ nav {
 
   .guess-container {
     @include shadow;
+    position: relative;
     display: flex;
     flex-direction: column;
-    width: 90%;
-    max-width: 900px;
+    justify-content: space-between;
+    width: 95%;
+    max-width: 500px;
+    min-height: 520px;
     height: 90%;
-    max-height: 800px;
-    border-radius: 5px;
+    max-height: 650px;
+    border-radius: 10px;
     background: $blueBackground;
     padding: 20px;
+    overflow: hidden;
+
+    #guessClose {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 100;
+    }
     
     h2 {
-      font-size: 24px;
+      font-size: 16px;
       font-family: $subheadings;
       font-weight: normal;
       text-align: center;
       color: $white;
+
+      @media #{$laptop} {
+        font-size: 24px;
+      }
     }
 
     .guess-grid {
@@ -1232,14 +1519,19 @@ nav {
       max-height: 210px;
       
 
-      input[type="radio"] {
+      input[type="checkbox"] {
         opacity: 0;
         display: none;
       }
 
-      input[type="radio"]:checked ~ label svg {
+      input[type="checkbox"]:checked ~ label svg {
         transform: scale(1.3);
-        z-index: 99;
+        z-index: 10;
+        filter: grayscale(0%) drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3)) !important;
+      }
+
+      input[type="checkbox"]:hover ~ label {
+        transform: scale(1.05);
         filter: grayscale(0%);
       }
 
@@ -1248,6 +1540,7 @@ nav {
         display: inline-block;
         width: 50px;
         height: 50px;
+        transition: all 100ms ease-in-out;
       }
 
       svg {
@@ -1259,7 +1552,7 @@ nav {
         text-align: center;
         stroke: $white;
         stroke-width: 0.5px;
-        transition: all 50ms ease-in-out;
+        transition: all 150ms ease-in-out;
         
         text {
           fill: $white;
@@ -1271,41 +1564,239 @@ nav {
     }
 
     .guess-weight {
-      height: 50%;
+      height: 50px;
       width: 100%;
       display: flex;
       justify-content: center;
+      
 
-      input[type="radio"] {
+      input[type="checkbox"] {
         opacity: 0;
         display: none;
       }
 
-      input[type="radio"]:checked ~ label {
-        color: $white;
+      input[type="checkbox"]:checked ~ label {
+        background: $skyLight;
+        transform: scale(1.1);
       }
 
       .guess-lighter, .guess-heavier {
         width: 50%;
+        height: fit-content;
+        display: flex;
         text-align: center;
+        justify-content: center;
+      }
+
+      label {
+        cursor: pointer;
+        font-size: 18px;
+        font-family: $sign;
+        color: #fff;
+        height: fit-content;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 150ms ease-in-out;
       }
     }
 
     .guess-submit {
-      margin: 0 auto;
+      margin: 20px auto 0 auto;
       padding: 10px 20px;
+      width: fit-content;
       background: $greenBtn;
       font-family: $sign;
       font-size: 20px;
       color: $white;
       border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .envelope-blackout {
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 99;
+    }
+
+    .win-loss {
+      @include absolute-center;
+      @include shadow;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      bottom: 20px;
+      width: 90%;
+      overflow: hidden;
+      height: fit-content;
+      padding: 20px 10px;
+      background: $red;
+      z-index: 99;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      opacity: 1;
+
+      div {
+        margin: 10px auto;
+      }
+
+      h3 {
+        font-size: 20px;
+        font-family: $sign;
+        color: $white;
+      }
+
+      p, span {
+        font-size: 16px;
+        font-family: $subheadings;
+        color: $white;
+      }
+
+      .win-loss-btns {
+        display: flex;
+
+        div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 50%;
+          margin: 0px 10px;
+          padding: 10px 10px;
+          background: $greenBtn;
+          border-radius: 5px;
+          color: $white;
+          font-family: $sign;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .envelope-holder {
+      bottom: 20px;
+      position: relative;
+      margin: 0 auto;
+      height: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 99;
+
+      .envelope-contents {
+        @include shadow;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        bottom: -100px;
+        height: 140px;
+        width: 240px;
+        padding: 10px;
+        background-image: url(images/paper.png);
+        background-color: #f8f8f5;
+        border-radius: 5px;
+        animation: exit-envelope 5s ease 0s 1 normal forwards paused;
+
+        @media only screen and (min-width: 600px) {
+          width: 310px;
+          height: 180px;
+          bottom: -75px;
+        }
+
+        h3 {
+          font-size: 20px;
+          font-family: $sign;
+          color: $charcoal;
+          text-align: center;
+          margin: 5px auto;
+        }
+
+        #envelopeMeeple {
+          position: static;
+          filter: none;
+          width: 60px;
+          height: 60px;
+          stroke-width: 0.5px;
+          stroke: $white;
+
+          text {
+            fill: $white;
+            stroke: none;
+            font-size: 24px; 
+            font-family: $sign;
+          }
+        }
+      }
+
+      svg {
+        @include drop-shadow;
+        position: absolute;
+        bottom: -300px;
+        width: 250px;
+        stroke: $charcoal;
+        fill: $white;
+        overflow: visible;
+        animation: enter-envelope 2s ease 0ms 1 normal forwards paused;
+
+        @media only screen and (min-width: 600px) {
+            width: 320px;
+        }
+  
+        #envelopeTop {
+          transform: rotateX(90deg) translateY(-180px);
+          transform-style: preserve-3d;
+          transform-origin: top;
+          animation: open-envelope 1s ease-out 2s 1 normal forwards paused;
+        }
+
+         #envelopeTopHide {
+          transform: rotateX(0deg) translateY(-180px);
+          transform-style: preserve-3d;
+          transform-origin: top;
+          animation: open-envelope-hide 500ms linear 1500ms normal forwards paused;
+         }
+      }
     }
   }
 }
 
+@keyframes enter-envelope {
+  from {transform: translateY(0px);}
+  to {transform: translateY(-250px);}
+}
+
+@keyframes envelope-leave {
+  from {transform: translateY(-250px);}
+  to {transform: translateY(260px);}
+}
+
+@keyframes open-envelope {
+  from {transform: rotateX(90deg) translateY(-180px);}
+  to {transform: rotateX(220deg) translateY(-180px);}
+}
+@keyframes open-envelope-hide {
+  0% {transform: rotateX(0deg) translateY(-180px);}
+  99% {transform: rotateX(90deg) translateY(-180px); opacity: 1;}
+  100% {transform: rotateX(90deg) translateY(-180px); opacity: 0;}
+}
+
+@keyframes exit-envelope {
+  0% {transform: translateY(0px);}
+  40% {transform: translateY(-250px);}
+  60% {transform: translateY(-250px);}
+  76% {transform: translateY(-280px);}
+  100% {transform: translateY(-500px);}
+}
 
 .grayscale {
-  filter: grayscale(90%);
+  filter: grayscale(80%);
 }
 
 .grayscale-black {

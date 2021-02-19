@@ -7,7 +7,7 @@
       <title>Twelve Villagers</title>
       <link rel="icon" href="images/meeple.svg">
       <link rel="stylesheet" href="style.css">
-      <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+      <script src="interact.min.js"></script>
       <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Raleway&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
       <div id="introText" class="description-holder">
         <h2>Rules</h2>
         <p>There are 12 men on an island.<br>
-          11 weigh exactly the same amount, but 1 of them is either lighter or heavier than the others. <br>You must figure out which.</p>
+          11 weigh exactly the same amount, but 1 of them is either lighter or heavier than the others.<br>You must figure out which.</p>
         <p>The island has no scales, but there is a seesaw....<br>
           You may only use it <span>3 times</span></p>
       </div>
@@ -69,11 +69,12 @@
     <!-- Game area -->
     <section class="game-area" id="gameArea">
 
-      <nav id="nav" class="">
+      <nav id="nav" class="invisible">
         <ul>
           <li><button id="newGame">New game</button></li>
+          <li><button id="viewRules">Rules</button></li>
           <li><button id="openNotepad">Notepad</button></li>
-          <li><button id="viewSolution">View solution</button></li>
+          <li><button id="viewSolution">solution</button></li>
         </ul>
       </nav>
 
@@ -85,10 +86,23 @@
 
       <!-- Instructions in sky -->
 
-      <div id="skyInstructions" class="sky-instructions">
-        <p>Place the villagers you wish to weigh on either side of the seesaw, then press 'Weigh' to use the seesaw</p>
+      <div id="skyInstructions" class="sky-instructions invisible">
+        <p>Place the villagers you wish to weigh on either side of the seesaw, then click 'Weigh' to use the seesaw</p>
         <p>Remember, you can only use the seesaw 3 times!</p>
       </div>
+
+      <div id="rulesContainer" class="rules-background invisible">
+        <div id="rules" class="rules-holder">
+          <div id="rulesClose" class="rules-close">X</div>
+          <h3>Rules</h3>
+          <p>There are 12 men on an island.<br>
+            11 weigh exactly the same amount, but 1 of them is either lighter <span>or</span> heavier than the others.<br>You must figure out which.</p>
+          <p>The island has no scales, but there is a seesaw....<br>
+            You may only use it <span>3 times</span></p>
+        </div>
+
+      </div>
+      
 
       <div id="preventClick" class="invisible"></div>
 
@@ -98,7 +112,7 @@
           <div class="seesaw">
             <div id="inner-dropzone" class="dropzone dropzone-left"></div>
             <div id="inner-dropzone" class="dropzone dropzone-right"></div>
-            <svg  id="seesawLog" xmlns="http://www.w3.org/2000/svg">
+            <svg id="seesawLog" xmlns="http://www.w3.org/2000/svg">
               <g>
                 <rect width="100%" height="50" x="0" y="0" rx="10" ry="10" fill="url(#wood)"></rect>
               </g>
@@ -175,7 +189,7 @@
         </div>
       <!-- End moving section -->
 
-      <svg id="seesawBase" xmlns="http://www.w3.org/2000/svg" width="150" height="125">
+      <svg id="seesawBase" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 125" >
         <g>
           <polygon class="round" fill="url(#wood)" points="10,115 140,115 75,10 10,115"></polygon>
         </g>
@@ -187,7 +201,7 @@
       </div>
 
 
-      <button id="guess" class="guess-btn" tabindex="-1">Make your guess</button>
+      <button id="openGuess" class="guess-btn" tabindex="-1">Make your guess</button>
 
       <div id="historyContainer">
         <div id="firstHistory" class="invisible">
@@ -392,85 +406,71 @@
         <button id="resetMeeples" class="meeple-reset" tabindex="-1">Reset villagers</button>
       </div>
 
-      <!-- <div id="guessContainer" class="guess-container">
-        <form id="guessForm">
-
-          <div id="inner-dropzone" class="dropzone dropzone-guess"></div>
-
-          <input type="radio" id="heavier" name="weight" class="radio-weight" value="2">
-          <label for="heavier">Heavier</label>
-
-          <input type="radio" id="lighter" name="weight" class="radio-weight" value="1">
-          <label for="lighter">Lighter</label>
-
-          <button type="button" id="submitGuess">Submit</button>
-        </form>
-      </div> -->
-
-
-      <div id="guessContainer" class="guess-background">
+      <div id="guessContainer" class="guess-background invisible">
         <div class="guess-container">
+
+          <div id="guessClose">X</div>
           
           <h2>I think that villager...</h2>
             
           <div class="guess-grid">
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess1" value="1">
+              <input type="checkbox" name="guess" id="guess1" value="1" class="guess-checkbox">
               <label for="guess1" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#171926" viewBox="0 0 62.677 65.324" id="meeple_2"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(28.5 40.438)">1</text></g></svg></label>
             </div>
 
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess2" value="2">
+              <input type="checkbox" name="guess" id="guess2" value="2" class="guess-checkbox">
               <label for="guess2" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#A5243D" viewBox="0 0 62.677 65.324" id="meeple_2"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">2</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess3" value="3">
+              <input type="checkbox" name="guess" id="guess3" value="3" class="guess-checkbox">
               <label for="guess3" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#37816A" viewBox="0 0 62.677 65.324" id="meeple_3"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">3</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess4" value="4">
+              <input type="checkbox" name="guess" id="guess4" value="4" class="guess-checkbox">
               <label for="guess4" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#D94730" viewBox="0 0 62.677 65.324" id="meeple_4"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">4</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess5" value="5">
+              <input type="checkbox" name="guess" id="guess5" value="5" class="guess-checkbox">
               <label for="guess5" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#7E55B4" viewBox="0 0 62.677 65.324" id="meeple_5"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">5</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess6" value="6">
+              <input type="checkbox" name="guess" id="guess6" value="6" class="guess-checkbox">
               <label for="guess6" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#0074B8" viewBox="0 0 62.677 65.324" id="meeple_6"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">6</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess7" value="7">
+              <input type="checkbox" name="guess" id="guess7" value="7" class="guess-checkbox">
               <label for="guess7" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#332593" viewBox="0 0 62.677 65.324" id="meeple_7"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">7</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess8" value="8">
+              <input type="checkbox" name="guess" id="guess8" value="8" class="guess-checkbox">
               <label for="guess8" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#083D77" viewBox="0 0 62.677 65.324" id="meeple_8"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">8</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess9" value="9">
+              <input type="checkbox" name="guess" id="guess9" value="9" class="guess-checkbox">
               <label for="guess9" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#E2798E" viewBox="0 0 62.677 65.324" id="meeple_9"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(25 40.438)">9</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess10" value="10">
+              <input type="checkbox" name="guess" id="guess10" value="10" class="guess-checkbox">
               <label for="guess10" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#E09600" viewBox="0 0 62.677 65.324" id="meeple_10"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(21 40.438)">10</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess11" value="11">
+              <input type="checkbox" name="guess" id="guess11" value="11" class="guess-checkbox">
               <label for="guess11" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#089B48" viewBox="0 0 62.677 65.324" id="meeple_11"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(23.5 40.438)">11</text></g></svg></label>
             </div>
             
             <div class="guess-grid-meeple">
-              <input type="radio" name="guess" id="guess12" value="12">
+              <input type="checkbox" name="guess" id="guess12" value="12" class="guess-checkbox">
               <label for="guess12" class="guess-label"><svg xmlns="http://www.w3.org/2000/svg" fill="#8B5A2D" viewBox="0 0 62.677 65.324" id="meeple_12"><g transform="translate(0.251 0.25)"><use x="0" y="0" xlink:href="#meepleShape"></use><text transform="translate(21 40.438)">12</text></g></svg></label>
             </div> 
           </div>
@@ -479,21 +479,90 @@
 
           <div class="guess-weight">
             <div class="guess-lighter">
-              <input type="radio" name="weight" id="guessLighter" value="lighter">
+              <input type="checkbox" name="weight" id="guessLighter" value="lighter">
               <label for="guessLighter" class="guess-label">Lighter</label>
             </div>
             
             <div class="guess-heavier">
-              <input type="radio" name="weight" id="guessHeavier" value="heavier">
+              <input type="checkbox" name="weight" id="guessHeavier" value="heavier">
               <label for="guessHeavier" class="guess-label">Heavier</label>
             </div>
             
           </div>
 
-          <!-- <p>I think that villager <span id="guessNumber">___</span> is <span id="guessWeight">___</span> than the others</p> -->
-          <div id="guessSub" class="guess-submit">Submit Guess</div>
+          <div id="guessSub" class="guess-submit invisible">Check Answer</div>
 
-        </div>     
+          <div id="envelopeBlackout" class="envelope-blackout invisible"></div>
+
+          <div id="winLossHolder" class="win-loss invisible">
+            <div id="winLossHeading">
+              <h3 id="winStatus"></h3>
+              <p id="winDescription"></p>
+              <p id="winCongrats"></p>
+            </div>
+
+            <div id="winLossButtons" class="win-loss-btns">
+              <div id="winLossPlayAgain">Play Again</div>
+              <div id="winLossViewSolution">View Full Solution</div>
+            </div>
+          </div>
+
+          <div class="envelope-holder">
+
+            <svg id="envelopeBackground" data-name="envelope" xmlns="http://www.w3.org/2000/svg" width="451" height="267" viewBox="0 0 451 267">
+              <g data-name="envelope-back">
+                <rect x="0" y="0" width="451" height="267" fill="#f5f5f5" />
+              </g>
+              <g id="envelopeTop" data-name="envelope-top">
+                <path d="M 449.5782165527344 180.5 L 1.421767711639404 180.5 L 215.4999694824219 400.6411772966384888 A 16 20, 0, 0, 0, 235.4999694824219 400.6411772966384888 L 449.5782165527344 180.5 Z"/>
+              </g>
+            </svg>
+
+            <div id="envelopeContents" class="envelope-contents">
+                
+                <div id="envelopeText"></div>
+                
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.677 65.324" id="envelopeMeeple">
+                    <g transform="translate(0.251 0.25)">
+                      <use x="0" y="0" xlink:href="#meepleShape"></use>                
+                      <text id="envelopeMeepleNo" transform="translate(25 40.438)"></text>
+                    </g>
+                  </svg>
+                </div>
+
+                <h3 id="envelopeWeight"></h3>
+            </div>
+
+            <svg id="envelopeForeground" data-name="envelope" xmlns="http://www.w3.org/2000/svg" width="451" height="267" viewBox="0 0 451 267">
+              <defs>
+                <pattern id="paper" patternUnits="userSpaceOnUse" width="100" height="100">
+                  <rect width="200" height="200" fill="#f8f8f5" stroke="none" />
+                  <image href="images/paper.png" x="0" y="0" width="200" height="200" />
+                </pattern>
+              </defs>
+
+              <g data-name="envelope-left" transform="translate(226) rotate(90)">
+                <path d="M 266.1239318847656 225.5 L 0.876071035861969 225.5 L 133.5 0.9830865263938904 L 266.1239318847656 225.5 Z"/>
+              </g>
+              <g data-name="envelope-right" transform="translate(225 267) rotate(-90)">
+                <path d="M 266.1239318847656 225.5 L 0.876071035861969 225.5 L 133.5 0.9830865263938904 L 266.1239318847656 225.5 Z"/>
+              </g>
+              <g data-name="envelope-bottom" transform="translate(0 94)">
+                <path d="M 449.5267944335938 172.5 L 1.473166942596436 172.5 L 215.4999847412109 0.6302018761634827 A 16 20, 0, 0, 1, 235.4999847412109 0.6302018761634827  L 235.4999847412109 0.6302018761634827 L 449.5267944335938 172.5 Z"/>
+              </g>
+
+              <g id="envelopeTopHide" data-name="envelope-top">
+                <path d="M 449.5782165527344 180.5 L 1.421767711639404 180.5 L 215.4999694824219 400.6411772966384888 A 16 20, 0, 0, 0, 235.4999694824219 400.6411772966384888 L 449.5782165527344 180.5 Z"/>
+              </g>
+            </svg>
+
+            
+          </div>
+
+          
+        </div>
+        
       </div>
 
       <div id="notepad" class="notepad-holder">
@@ -551,7 +620,9 @@
       
 
       <!-- Decorative elements -->
-      <div class="sand"></div>
+      <div class="sand">
+        <p>&#169 Matt Karwan</p>
+      </div>
 
     </section>
 
