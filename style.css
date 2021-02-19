@@ -27,6 +27,7 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, from(#0081f8), to(#0096ff));
   background: linear-gradient(#0081f8, #0096ff);
   z-index: -99;
+  overflow: hidden;
 }
 
 button {
@@ -313,8 +314,8 @@ button {
 }
 
 .cloud-container img:nth-child(2) {
-  -webkit-animation-duration: 41s;
-          animation-duration: 41s;
+  -webkit-animation-duration: 43s;
+          animation-duration: 43s;
 }
 
 .cloud-container img:nth-child(3) {
