@@ -260,7 +260,7 @@ function newGame() {
   // Reset moves count
   remaining = 3;
   remainingCount.innerHTML = `${remaining} uses remaining`;
-  makeVisible(weighBtnHolder);
+  makeVisible(weighBtn, weighBtnHolder);
 
   // Clear history
   clearHistory();
