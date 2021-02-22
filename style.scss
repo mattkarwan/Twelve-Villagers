@@ -80,7 +80,7 @@ body, html {
 body {
   background: linear-gradient($skyDark, $skyLight);
   z-index: -99;
-  overflow: hidden;  
+  overflow: hidden;
 }
 
 
@@ -93,7 +93,7 @@ button {
 }
 
 @keyframes movePages {
-  to {transform: translateY(-100vh);}
+  to {transform: translateY(-100%);}
 }
 
 
@@ -109,6 +109,7 @@ button {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,6 +120,7 @@ button {
       display: flex;
       justify-content: center;
       width: 60%;
+      max-height: 40%;
       max-width: 400px;
       z-index: -1;
       transition: 1250ms all ease-in-out;
@@ -178,7 +180,7 @@ button {
 
       @media #{$laptop} {
         padding: 10px;
-        margin: 20px auto 20px auto;
+        margin: 10px auto;
 
         h2 {
           font-size: 20px;
@@ -191,6 +193,13 @@ button {
           span {
             font-size: 18px;
           }
+        }
+      }
+
+      @media only screen and (max-height: 500px) {
+
+        h2, p, p span {
+          font-size: 14px;
         }
       }
     }
@@ -750,9 +759,9 @@ nav {
 
 @keyframes wobble {
     0% {transform: rotate(0deg);}
-    25% {transform: rotate(2deg) translatex(1%);}
+    25% {transform: rotate(2deg);}
     50% {transform: rotate(0deg);}
-    75% {transform: rotate(-2deg) translatex(-1%);}
+    75% {transform: rotate(-2deg);}
     100% {transform: rotate(0deg);}
   }
 
@@ -777,21 +786,21 @@ nav {
 // }
 @keyframes heavier {
   0% {transform: rotate(0deg);}
-  12.5% {transform: rotate(2deg) translatex(-0.5%);}
+  12.5% {transform: rotate(2deg);}
   25% {transform: rotate(0deg);}
-  37.5% {transform: rotate(-2deg) translatex(0.5%);}
-  60% {transform: rotate(-20deg) translate(-4%, -2%);}
-  90% {transform: rotate(-20deg) translate(-4%, -2%);}
+  37.5% {transform: rotate(-2deg);}
+  60% {transform: rotate(-20deg);}
+  90% {transform: rotate(-20deg);}
   100% {transform: rotate(0deg);}
 }
 
 @keyframes lighter {
   0% {transform: rotate(0deg);}
-  12.5% {transform: rotate(-2deg) translatex(8px);}
+  12.5% {transform: rotate(-2deg);}
   25% {transform: rotate(0deg);}
-  37.5% {transform: rotate(2deg) translatex(-8px);}
-  60% {transform: rotate(20deg) translate(-75px, 10px);}
-  90% {transform: rotate(20deg) translate(-75px, 10px);}
+  37.5% {transform: rotate(2deg);}
+  60% {transform: rotate(20deg);}
+  90% {transform: rotate(20deg);}
   100% {transform: rotate(0deg);}
 }
 
@@ -799,18 +808,18 @@ nav {
 
 @keyframes last-heavier {
   0% {transform: rotate(0deg);}
-  25% {transform: rotate(2deg) translatex(-8px);}
+  25% {transform: rotate(2deg);}
   50% {transform: rotate(0deg);}
-  75% {transform: rotate(-2deg) translatex(8px);}
-  100% {transform: rotate(-20deg) translate(80px, 12px);}
+  75% {transform: rotate(-2deg);}
+  100% {transform: rotate(-20deg);}
 }
 
 @keyframes last-lighter {
   0% {transform: rotate(0deg);}
-  25% {transform: rotate(-2deg) translatex(8px);}
+  25% {transform: rotate(-2deg);}
   50% {transform: rotate(0deg);}
-  75% {transform: rotate(2deg) translatex(-8px);}
-  100% {transform: rotate(20deg) translate(-75px, 10px);}
+  75% {transform: rotate(2deg);}
+  100% {transform: rotate(20deg);}
 }
 
 #drag-1, #drag-2 {
@@ -925,7 +934,11 @@ nav {
   display: flex;
   width: 100%;
   height: 100%;
-  transform-origin: 0 100%;
+  transform-origin: 40% 60%;
+
+  @media #{$laptop} {
+    transform-origin: 50% 70%;
+  }
   
   &::after {
     position: absolute;
