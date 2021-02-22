@@ -73,7 +73,7 @@ $desktop: "only screen and (min-width: 1025px)";
 }
 
 body, html {
-  height: var(--app-height);
+  height: 100%;
   overflow-x: hidden;
 }
 
@@ -98,7 +98,7 @@ button {
 
 
 .game-area {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   position: relative;
   transition: transform 3500ms ease-in-out;
@@ -108,7 +108,7 @@ button {
 .home-page {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
