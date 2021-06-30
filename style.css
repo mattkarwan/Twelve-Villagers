@@ -20,7 +20,7 @@
 
 body, html {
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -67,7 +67,7 @@ button {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow: hidden;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -310,18 +310,18 @@ button {
 }
 
 .cloud-container img:nth-child(2) {
-  -webkit-animation-duration: 43s;
-          animation-duration: 43s;
+  -webkit-animation-duration: 41s;
+          animation-duration: 41s;
 }
 
 .cloud-container img:nth-child(3) {
-  -webkit-animation-duration: 39s;
-          animation-duration: 39s;
+  -webkit-animation-duration: 42s;
+          animation-duration: 42s;
 }
 
 .cloud-container img:nth-child(4) {
-  -webkit-animation-duration: 37s;
-          animation-duration: 37s;
+  -webkit-animation-duration: 41s;
+          animation-duration: 41s;
 }
 
 @-webkit-keyframes cloud {
