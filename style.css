@@ -27,7 +27,6 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, from(#0081f8), to(#0096ff));
   background: linear-gradient(#0081f8, #0096ff);
   z-index: -99;
-  overflow: hidden;
 }
 
 button {
@@ -149,8 +148,6 @@ button {
 }
 
 .home-page .description-holder {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -212,8 +209,6 @@ button {
 }
 
 .home-page button {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   font-family: "Julius Sans One", sans-serif;
   font-size: 16px;
   color: #fff;
@@ -229,11 +224,6 @@ button {
     padding: 20px;
     font-size: 20px;
   }
-}
-
-.sign-holder {
-  -webkit-filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
 }
 
 .sign-holder .sign-string {
@@ -267,8 +257,6 @@ button {
 }
 
 .cloud-container .cloud {
-  -webkit-filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
   width: 75px;
   -webkit-animation: cloud 22s linear 0ms infinite normal none running;
           animation: cloud 22s linear 0ms infinite normal none running;
@@ -327,8 +315,8 @@ button {
 }
 
 .cloud-container img:nth-child(3) {
-  -webkit-animation-duration: 42s;
-          animation-duration: 42s;
+  -webkit-animation-duration: 39s;
+          animation-duration: 39s;
 }
 
 .cloud-container img:nth-child(4) {
@@ -410,8 +398,6 @@ nav ul li button {
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   top: 60px;
   text-align: center;
   width: 100%;
@@ -461,8 +447,6 @@ nav ul li button {
 }
 
 .rules-holder {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   position: relative;
   width: 95%;
   max-width: 500px;
@@ -529,8 +513,6 @@ nav ul li button {
 }
 
 .meeple {
-  -webkit-filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
   position: absolute;
   width: 30px;
   height: 30px;
@@ -647,6 +629,13 @@ nav ul li button {
   transition: opacity 250ms ease-in-out;
 }
 
+@media only screen and (min-width: 769px) {
+  #historyContainer {
+    -ms-grid-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 #historyContainer h3 {
   font-family: "Julius Sans One", sans-serif;
   font-size: 14px;
@@ -662,32 +651,34 @@ nav ul li button {
   }
 }
 
-#firstHistory, #secondHistory {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
+#firstHistory,
+#secondHistory,
+#thirdHistory {
   -webkit-transition: 250ms opacity ease-in-out;
   transition: 250ms opacity ease-in-out;
   padding: 10px;
   width: 80%;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 1rem auto;
   background: #005698;
   border-radius: 20px;
 }
 
 @media only screen and (min-width: 769px) {
-  #firstHistory, #secondHistory {
+  #firstHistory,
+  #secondHistory,
+  #thirdHistory {
     padding: 20px;
   }
 }
 
-#firstHistory svg, #secondHistory svg {
+#firstHistory svg,
+#secondHistory svg,
+#thirdHistory svg {
   width: 100%;
 }
 
 #seesawLog {
-  -webkit-filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
   border-radius: 10px;
   height: 24px;
 }
@@ -731,13 +722,16 @@ nav ul li button {
 .FH_left-meeple,
 .FH_right-meeple,
 .SH_left-meeple,
-.SH_right-meeple {
+.SH_right-meeple,
+.TH_left-meeple,
+.TH_right-meeple {
   fill: none;
   stroke-width: 0.3px;
 }
 
 .FH_text,
-.SH_text {
+.SH_text,
+.TH_text {
   stroke: none !important;
   font-size: 20px;
   fill: #fff;
@@ -1057,98 +1051,6 @@ nav ul li button {
   }
 }
 
-/* Animations for last weighing */
-@-webkit-keyframes last-heavier {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  25% {
-    -webkit-transform: rotate(2deg);
-            transform: rotate(2deg);
-  }
-  50% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  75% {
-    -webkit-transform: rotate(-2deg);
-            transform: rotate(-2deg);
-  }
-  100% {
-    -webkit-transform: rotate(-20deg);
-            transform: rotate(-20deg);
-  }
-}
-@keyframes last-heavier {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  25% {
-    -webkit-transform: rotate(2deg);
-            transform: rotate(2deg);
-  }
-  50% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  75% {
-    -webkit-transform: rotate(-2deg);
-            transform: rotate(-2deg);
-  }
-  100% {
-    -webkit-transform: rotate(-20deg);
-            transform: rotate(-20deg);
-  }
-}
-
-@-webkit-keyframes last-lighter {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  25% {
-    -webkit-transform: rotate(-2deg);
-            transform: rotate(-2deg);
-  }
-  50% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  75% {
-    -webkit-transform: rotate(2deg);
-            transform: rotate(2deg);
-  }
-  100% {
-    -webkit-transform: rotate(20deg);
-            transform: rotate(20deg);
-  }
-}
-
-@keyframes last-lighter {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  25% {
-    -webkit-transform: rotate(-2deg);
-            transform: rotate(-2deg);
-  }
-  50% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  75% {
-    -webkit-transform: rotate(2deg);
-            transform: rotate(2deg);
-  }
-  100% {
-    -webkit-transform: rotate(20deg);
-            transform: rotate(20deg);
-  }
-}
-
 #drag-1, #drag-2 {
   width: 25%;
   min-height: 6.5em;
@@ -1355,8 +1257,6 @@ nav ul li button {
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   top: 10px;
   width: 90%;
   max-width: 500px;
@@ -1735,8 +1635,6 @@ nav ul li button {
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  -webkit-filter: drop-shadow(-10px -5px 10px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-10px -5px 10px rgba(0, 0, 0, 0.3));
   bottom: 120px;
   height: 75px;
   width: 150px;
@@ -1776,8 +1674,6 @@ nav ul li button {
 }
 
 .notepad {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   position: relative;
   width: 250px;
@@ -1822,8 +1718,6 @@ nav ul li button {
 }
 
 .front-cover {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
   right: 0;
@@ -2068,8 +1962,6 @@ nav ul li button {
 }
 
 .guess-background .guess-container {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2139,8 +2031,6 @@ nav ul li button {
   -webkit-transform: scale(1.3);
           transform: scale(1.3);
   z-index: 10;
-  -webkit-filter: grayscale(0%) drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3)) !important;
-          filter: grayscale(0%) drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3)) !important;
 }
 
 .guess-background .guess-container .guess-grid input[type="checkbox"]:hover ~ label {
@@ -2259,8 +2149,6 @@ nav ul li button {
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2350,8 +2238,6 @@ nav ul li button {
 }
 
 .guess-background .guess-container .envelope-holder .envelope-contents {
-  -webkit-box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
-          box-shadow: -5px 10px 5px rgba(0, 0, 0, 0.2);
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2411,8 +2297,6 @@ nav ul li button {
 }
 
 .guess-background .guess-container .envelope-holder svg {
-  -webkit-filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(-5px 10px 2.5px rgba(0, 0, 0, 0.3));
   position: absolute;
   bottom: -300px;
   width: 250px;
